@@ -18,6 +18,9 @@ class PlayState extends FlxState
 	@:dox(hide) override public function create()
 	{
 		super.create();
+		FlxG.camera.pixelPerfectRender = true;
+		FlxG.camera.pixelPerfectShake = true;
+
 		add(new GridSprite(FlxColor.WHITE));
 		add(snake = new Snake(0, 0));
 		apple_timer = new Timer(2000);

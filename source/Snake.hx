@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
+import flixel.util.FlxCollision;
 import flixel.util.FlxColor;
 import flixel.util.FlxDestroyUtil;
 import flixel.util.FlxSpriteUtil;
@@ -26,8 +27,7 @@ class Snake extends FlxGroup
 
 	var snakeBody:FlxGroup = new FlxGroup();
 
-	var snakeLength:Int = 5;
-
+	var gameOver:Bool = false;
 	var prevPositions:Array<Array<Float>> = [];
 
 	public var direction:Null<SnakeDirection> = null;
@@ -43,14 +43,6 @@ class Snake extends FlxGroup
 		add(snakeHead);
 		add(snakeBody);
 		doTimer();
-		for (i in 0...snakeLength)
-		{
-			var tailSquare:FlxSprite = new FlxSprite();
-			tailSquare.makeGraphic(Constants.TILE_SIZE, Constants.TILE_SIZE);
-			tailSquare.color = tailColor;
-			snakeBody.add(tailSquare);
-		}
-
 	}
 
 
@@ -71,22 +63,36 @@ class Snake extends FlxGroup
 	@:noCompletion override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
-		trace(this.direction);
 		// loop through snakebody members
-		for (member in snakeBody.members)
+		if (gameOver != true)
 		{
-			// create a variable for each member
-			var tails:FlxSprite = cast member;
-			// wait for the previous positions to equal the snake body length
-			// it has -1 because it also stores the head
-			if (prevPositions.length - 1 == snakeBody.length)
+			for (member in snakeBody.members)
 			{
-				// use the previous position from the array
-				tails.x = prevPositions[snakeBody.members.indexOf(member)][0];
-				tails.y = prevPositions[snakeBody.members.indexOf(member)][1];
+				// create a variable for each member
+				var tails:FlxSprite = cast member;
+				// wait for the previous positions to equal the snake body length
+				// it has -1 because it also stores the head
+				if (prevPositions.length - 1 == snakeBody.length)
+				{
+					// use the previous position from the array
+					tails.x = prevPositions[snakeBody.members.indexOf(member)][0];
+					tails.y = prevPositions[snakeBody.members.indexOf(member)][1];
+				}
+				if (FlxCollision.pixelPerfectCheck(snakeHead, tails))
+				{
+					gameOver = true;
+				}
 			}
 		}
 
+	}
+
+	public function grow()
+	{
+		var tailSquare:FlxSprite = new FlxSprite();
+		tailSquare.makeGraphic(Constants.TILE_SIZE, Constants.TILE_SIZE);
+		tailSquare.color = tailColor;
+		snakeBody.add(tailSquare);
 	}
 
 	function move():Void
@@ -102,7 +108,7 @@ class Snake extends FlxGroup
 			prevPositions.push([tails.x, tails.y]);
 		}
 		
-		if (direction != null)
+		if (direction != null && gameOver != true)
 		{
 			switch (direction)
 			{
@@ -117,9 +123,5 @@ class Snake extends FlxGroup
 			}
 			FlxSpriteUtil.screenWrap(snakeHead);
 		}
-		// debug shit
-		// trace(prevPositions);
-		// trace(prevPositions.length);
-	
 	}
 }

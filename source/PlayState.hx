@@ -41,6 +41,12 @@ class PlayState extends FlxState
 		// Set the shader
 		FlxG.camera.filters = [new ShaderFilter(crt = new CrtShader())];
 		#end
+		if (FlxG.sound.music == null)
+		{
+			FlxG.sound.playMusic(AssetPaths.retro_arcade_game_music_297305__ogg, 1, true);
+		}
+
+
 	}
 
 	/**
@@ -81,6 +87,7 @@ class PlayState extends FlxState
 			if (spr != null && FlxCollision.pixelPerfectCheck(snake.snakeHead, spr))
 			{
 				appleGroup.remove(spr);
+				snake.grow();
 				spr.kill();
 				spr.destroy();
 			}

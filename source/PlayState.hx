@@ -29,6 +29,7 @@ class PlayState extends FlxState
 
 	@:dox(hide) override public function create()
 	{
+		new states.Menu();
 		super.create();
 		FlxG.camera.pixelPerfectRender = FlxG.camera.pixelPerfectShake = true;
 

@@ -110,7 +110,7 @@ class PlayState extends FlxState
 	{
 		if (snake != null && spr != null)
 		{
-			snake.addApple();
+			snake.grow();
 			appleGroup.remove(spr);
 			spr.kill();
 			spr.destroy();

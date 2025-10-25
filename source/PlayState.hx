@@ -4,15 +4,17 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.util.FlxColor;
+import openfl.display.Sprite;
 
 class PlayState extends FlxState
 {
-	var snake:Snake = new Snake(0, 0);
+	var snake:Snake;
 
 	@:dox(hide) override public function create()
 	{
 		super.create();
-		add(snake);
+		add(new GridSprite(FlxColor.WHITE));
+		add(snake = new Snake(0, 0));
 	}
 
 	@:dox(hide) override public function update(elapsed:Float)

@@ -87,7 +87,6 @@ class PlayState extends FlxState
 			if (spr != null && FlxCollision.pixelPerfectCheck(snake.snakeHead, spr))
 			{
 				appleGroup.remove(spr);
-				snake.grow();
 				spr.kill();
 				spr.destroy();
 			}
@@ -104,6 +103,17 @@ class PlayState extends FlxState
 				snake.direction = UP;
 			else if (FlxG.keys.anyJustPressed([S, DOWN]))
 				snake.direction = DOWN;
+		}
+	}
+
+	private function collectApple(spr:Apple):Void
+	{
+		if (snake != null && spr != null)
+		{
+			snake.addApple();
+			appleGroup.remove(spr);
+			spr.kill();
+			spr.destroy();
 		}
 	}
 }

@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
+import flixel.sound.FlxSound;
 import flixel.util.FlxCollision;
 import flixel.util.FlxColor;
 import flixel.util.FlxDestroyUtil;
@@ -29,6 +30,8 @@ class Snake extends FlxGroup
 
 	var gameOver:Bool = false;
 	var prevPositions:Array<Array<Float>> = [];
+	var explosion:FlxSound;
+	var hasPlayed:Bool = false;
 
 	public var direction:Null<SnakeDirection> = null;
 
@@ -40,6 +43,7 @@ class Snake extends FlxGroup
 		snakeHead.makeGraphic(Constants.TILE_SIZE, Constants.TILE_SIZE);
 		snakeHead.setPosition(x, y);
 		snakeHead.color = snakeColor;
+		explosion = FlxG.sound.load(AssetPaths.explosion__ogg);
 		add(snakeHead);
 		add(snakeBody);
 		doTimer();
@@ -83,6 +87,14 @@ class Snake extends FlxGroup
 				{
 					gameOver = true;
 				}
+			}
+		}
+		else
+		{
+			if (hasPlayed != true)
+			{
+				explosion.play();
+				hasPlayed = true;
 			}
 		}
 

@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.group.FlxSpriteGroup;
+import flixel.sound.FlxSound;
 import flixel.util.FlxCollision;
 import flixel.util.FlxColor;
 import openfl.filters.ShaderFilter;
@@ -13,6 +14,7 @@ class PlayState extends FlxState
 	 * The Snake Player Thingy...
 	 */
 	var snake:Snake;
+	var collectApple:FlxSound;
 
 	#if SHADERS_ALLOWED
 	/**
@@ -36,7 +38,7 @@ class PlayState extends FlxState
 		add(new GridSprite(FlxColor.WHITE));
 		add(appleGroup = new FlxTypedSpriteGroup<Apple>());
 		add(snake = new Snake(0, 0));
-
+		collectApple = FlxG.sound.load(AssetPaths.collectsound__ogg);
 		#if SHADERS_ALLOWED
 		// Set the shader
 		FlxG.camera.filters = [new ShaderFilter(crt = new CrtShader())];
@@ -86,6 +88,8 @@ class PlayState extends FlxState
 		{
 			if (spr != null && FlxCollision.pixelPerfectCheck(snake.snakeHead, spr))
 			{
+				snake.grow();
+				collectApple.play();
 				appleGroup.remove(spr);
 				spr.kill();
 				spr.destroy();
@@ -103,17 +107,6 @@ class PlayState extends FlxState
 				snake.direction = UP;
 			else if (FlxG.keys.anyJustPressed([S, DOWN]))
 				snake.direction = DOWN;
-		}
-	}
-
-	private function collectApple(spr:Apple):Void
-	{
-		if (snake != null && spr != null)
-		{
-			snake.grow();
-			appleGroup.remove(spr);
-			spr.kill();
-			spr.destroy();
 		}
 	}
 }

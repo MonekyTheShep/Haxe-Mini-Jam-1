@@ -29,9 +29,7 @@ class PlayState extends FlxState
 
 	public function spawnApple():Void
 	{
-		final apple:Apple = new Apple();
-		apple.x = (FlxG.random.int(0, Std.int(FlxG.width / Constants.TILE_SIZE) - 1)) * Constants.TILE_SIZE;
-		apple.y = (FlxG.random.int(0, Std.int(FlxG.height / Constants.TILE_SIZE) - 1)) * Constants.TILE_SIZE;
+		var apple:Apple = new Apple();
 		add(apple);
 	}
 

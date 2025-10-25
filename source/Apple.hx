@@ -2,15 +2,28 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 
 class Apple extends FlxSprite
 {
+	var tween:FlxTween;
 	public function new()
 	{
 		super();
-		makeGraphic(Constants.TILE_SIZE, Constants.TILE_SIZE, FlxColor.RED);
+		// makeGraphic(Constants.TILE_SIZE, Constants.TILE_SIZE, FlxColor.RED);
 		loadGraphic("assets/images/apple.png");
+		this.x = (FlxG.random.int(0, Std.int(FlxG.width / Constants.TILE_SIZE) - 1)) * Constants.TILE_SIZE;
+		this.y = (FlxG.random.int(0, Std.int(FlxG.height / Constants.TILE_SIZE) - 1)) * Constants.TILE_SIZE;
+		FlxTween.tween(this, {x: this.x, y: this.y - 2}, 2, {
+			type: PINGPONG,
+			ease: FlxEase.quadInOut,
+			startDelay: 0,
+			loopDelay: 0
+		});
+		// tween = FlxTween.tween(this, {x: 0, y: 0}, 2);
+
 	}
 
 	override public function update(elapsed:Float):Void

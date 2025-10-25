@@ -78,7 +78,7 @@ class PlayState extends FlxState
 		// Handle Apple Collisions...
 		appleGroup.forEachAlive((spr:Apple) ->
 		{
-			if (spr != null && FlxCollision.pixelPerfectCheck(snake, spr))
+			if (spr != null && FlxCollision.pixelPerfectCheck(snake.snakeHead, spr))
 			{
 				appleGroup.remove(spr);
 				spr.kill();

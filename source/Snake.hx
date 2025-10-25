@@ -22,7 +22,7 @@ class Snake extends FlxGroup
 	var snakeColor = FlxColor.GREEN;
 	var tailColor = FlxColor.RED;
 
-	var snakeHead:FlxSprite = new FlxSprite();
+	public var snakeHead:FlxSprite = new FlxSprite();
 
 	var snakeBody:FlxGroup = new FlxGroup();
 
@@ -118,8 +118,8 @@ class Snake extends FlxGroup
 			FlxSpriteUtil.screenWrap(snakeHead);
 		}
 		// debug shit
-		trace(prevPositions);
-		trace(prevPositions.length);
+		// trace(prevPositions);
+		// trace(prevPositions.length);
 	
 	}
 }

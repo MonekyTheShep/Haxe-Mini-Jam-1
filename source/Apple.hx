@@ -10,6 +10,7 @@ class Apple extends FlxSprite
 	{
 		super();
 		makeGraphic(Constants.TILE_SIZE, Constants.TILE_SIZE, FlxColor.RED);
+		loadGraphic("assets/images/apple.png");
 	}
 
 	override public function update(elapsed:Float):Void

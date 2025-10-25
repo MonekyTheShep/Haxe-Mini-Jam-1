@@ -23,14 +23,12 @@ class Snake extends FlxGroup
 {
 	var snakeColor = FlxColor.GREEN;
 	var tailColor = FlxColor.RED;
-
 	public var snakeHead:FlxSprite = new FlxSprite();
-
 	var snakeBody:FlxGroup = new FlxGroup();
-
-	var gameOver:Bool = false;
 	var prevPositions:Array<Array<Float>> = [];
+
 	var explosion:FlxSound;
+	public var gameOver:Bool = false;
 	var hasPlayed:Bool = false;
 
 	public var direction:Null<SnakeDirection> = null;

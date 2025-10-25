@@ -1,9 +1,11 @@
 package;
 
+import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.group.FlxSpriteGroup;
 import flixel.sound.FlxSound;
+import flixel.text.FlxText;
 import flixel.util.FlxCollision;
 import flixel.util.FlxColor;
 import openfl.filters.ShaderFilter;
@@ -15,7 +17,9 @@ class PlayState extends FlxState
 	 */
 	var snake:Snake;
 	var collectApple:FlxSound;
-
+	var uiCamera:FlxCamera;
+	var scoreText:FlxText;
+	var score = 0;
 	#if SHADERS_ALLOWED
 	/**
 	 * The CRT shader.
@@ -32,17 +36,28 @@ class PlayState extends FlxState
 	@:dox(hide) override public function create()
 	{
 		new states.Menu();
+
 		super.create();
+		collectApple = FlxG.sound.load(AssetPaths.collectsound__ogg);
+
+		uiCamera = new FlxCamera();
+		uiCamera.bgColor = FlxColor.TRANSPARENT;
+		FlxG.cameras.add(uiCamera, false);
 		FlxG.camera.pixelPerfectRender = FlxG.camera.pixelPerfectShake = true;
+
+		scoreText = new FlxText(10, 10, null, "Score: ", 30);
+		scoreText.cameras = [uiCamera];
 
 		add(new GridSprite(FlxColor.WHITE));
 		add(appleGroup = new FlxTypedSpriteGroup<Apple>());
 		add(snake = new Snake(0, 0));
-		collectApple = FlxG.sound.load(AssetPaths.collectsound__ogg);
+		add(scoreText);
+		
 		#if SHADERS_ALLOWED
 		// Set the shader
 		FlxG.camera.filters = [new ShaderFilter(crt = new CrtShader())];
 		#end
+
 		if (FlxG.sound.music == null)
 		{
 			FlxG.sound.playMusic(AssetPaths.retro_arcade_game_music_297305__ogg, 1, true);
@@ -89,6 +104,8 @@ class PlayState extends FlxState
 			if (spr != null && FlxCollision.pixelPerfectCheck(snake.snakeHead, spr))
 			{
 				snake.grow();
+				score += 1;
+				scoreText.text = 'Score: {$score}';
 				collectApple.play();
 				appleGroup.remove(spr);
 				spr.kill();
@@ -99,13 +116,13 @@ class PlayState extends FlxState
 		// Handle Movement...
 		if (snake != null)
 		{
-			if (FlxG.keys.anyJustPressed([A, LEFT]))
+			if (FlxG.keys.anyJustPressed([A, LEFT]) && snake.direction != RIGHT)
 				snake.direction = LEFT;
-			else if (FlxG.keys.anyJustPressed([D, RIGHT]))
+			else if (FlxG.keys.anyJustPressed([D, RIGHT]) && snake.direction != LEFT)
 				snake.direction = RIGHT;
-			else if (FlxG.keys.anyJustPressed([W, UP]))
+			else if (FlxG.keys.anyJustPressed([W, UP]) && snake.direction != DOWN)
 				snake.direction = UP;
-			else if (FlxG.keys.anyJustPressed([S, DOWN]))
+			else if (FlxG.keys.anyJustPressed([S, DOWN]) && snake.direction != UP)
 				snake.direction = DOWN;
 		}
 	}

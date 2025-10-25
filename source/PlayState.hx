@@ -50,7 +50,7 @@ class PlayState extends FlxState
 
 		add(new GridSprite(FlxColor.WHITE));
 		add(appleGroup = new FlxTypedSpriteGroup<Apple>());
-		add(snake = new Snake(0, 0));
+		add(snake = new Snake(FlxG.width / 2, FlxG.height / 2));
 		add(scoreText);
 		
 		#if SHADERS_ALLOWED
@@ -84,8 +84,12 @@ class PlayState extends FlxState
 
 			if (_appleSpawnTimer >= 2)
 			{
-				appleGroup.add(new Apple());
-				_appleSpawnTimer = 0;
+				if (snake.gameOver != true)
+				{
+					appleGroup.add(new Apple());
+					_appleSpawnTimer = 0;
+				}
+
 			}
 		}
 

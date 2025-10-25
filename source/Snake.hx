@@ -43,14 +43,18 @@ class Snake extends FlxGroup
 		add(snakeHead);
 		add(snakeBody);
 		doTimer();
-		for (i in 0...snakeLength)
+		for (_ in 0...snakeLength)
 		{
-			var tailSquare:FlxSprite = new FlxSprite();
-			tailSquare.makeGraphic(Constants.TILE_SIZE, Constants.TILE_SIZE);
-			tailSquare.color = tailColor;
-			snakeBody.add(tailSquare);
+			addApple();
 		}
+	}
 
+	public function addApple():Void
+	{
+		var tailSquare:FlxSprite = new FlxSprite();
+		tailSquare.makeGraphic(Constants.TILE_SIZE, Constants.TILE_SIZE);
+		tailSquare.color = tailColor;
+		snakeBody.add(tailSquare);
 	}
 
 

@@ -45,7 +45,7 @@ class PlayState extends FlxState
 		FlxG.cameras.add(uiCamera, false);
 		FlxG.camera.pixelPerfectRender = FlxG.camera.pixelPerfectShake = true;
 
-		scoreText = new FlxText(10, 10, null, "Score: ", 30);
+		scoreText = new FlxText(10, 10, 0, "Score: ", 30);
 		scoreText.cameras = [uiCamera];
 
 		add(new GridSprite(FlxColor.WHITE));

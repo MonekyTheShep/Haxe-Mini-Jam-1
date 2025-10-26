@@ -41,7 +41,7 @@ class Menu extends FlxState
 	{
 		super.create();
 
-		add(background = new FlxSprite().loadGraphic(AssetPaths.backgroundgradient__png));
+		add(background = new FlxSprite().loadGraphic(AssetPaths.background__png));
 		background.setGraphicSize(FlxG.width, FlxG.height);
 		background.screenCenter();
 		FlxTween.tween(background, {alpha: 1}, 1, {ease: FlxEase.quadInOut});

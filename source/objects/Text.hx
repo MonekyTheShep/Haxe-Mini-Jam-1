@@ -13,7 +13,8 @@ class Text extends FlxText {
 	public function new(X:Float = 0, Y:Float = 0, FieldWidth:Float = 0, ?Text:String, Size:Int = 16, EmbeddedFont:Bool = true, ?Font:String) {
 		super(X, Y, FieldWidth, Text, Size, EmbeddedFont);
 		setFormat(Font ?? AssetPaths.SnakeChan_MMoJ__ttf, Size, FlxColor.WHITE);
-		antialiasing = false; textField.sharpness = 1200; textField.antiAliasType = openfl.text.AntiAliasType.ADVANCED;
+		antialiasing = true;
+		textField.antiAliasType = openfl.text.AntiAliasType.ADVANCED;
 	}
 
 	@:noCompletion override function regenGraphic() : Void  {

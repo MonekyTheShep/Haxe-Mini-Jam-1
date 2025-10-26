@@ -1,10 +1,9 @@
-package;
+package objects;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import flixel.util.FlxColor;
 
 class Apple extends FlxSprite
 {

@@ -9,7 +9,6 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
-import objects.Text;
 
 class Menu extends FlxState
 {
@@ -118,4 +117,29 @@ typedef TOptionsStruc =
 {
 	name:String,
 	?onClick:(w:Text) -> Class<FlxState>
+}
+
+class Text extends FlxText
+{
+	public var constant(default, set):Bool;
+
+	@:noCompletion inline function set_constant(v:Bool):Bool
+	{
+		alive = active = !v;
+		return this.constant = v;
+	}
+
+	public function new(X:Float = 0, Y:Float = 0, FieldWidth:Float = 0, ?Text:String, Size:Int = 16, EmbeddedFont:Bool = true, ?Font:String)
+	{
+		super(X, Y, FieldWidth, Text, Size, EmbeddedFont);
+		setFormat(Font ?? AssetPaths.SnakeChan_MMoJ__ttf, Size, FlxColor.WHITE);
+		antialiasing = true;
+		textField.antiAliasType = openfl.text.AntiAliasType.ADVANCED;
+	}
+
+	@:noCompletion override function regenGraphic():Void
+	{
+		super.regenGraphic();
+		graphic.persist = !this.constant;
+	}
 }

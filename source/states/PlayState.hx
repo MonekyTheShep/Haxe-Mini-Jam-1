@@ -1,4 +1,4 @@
-package;
+package states;
 
 import flixel.FlxCamera;
 import flixel.FlxG;
@@ -11,6 +11,10 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxCollision;
 import flixel.util.FlxColor;
+import objects.Apple;
+import objects.GridSprite;
+import objects.Snake;
+import objects.shaders.CrtShader;
 import openfl.filters.ShaderFilter;
 import states.Menu;
 

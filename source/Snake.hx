@@ -79,7 +79,6 @@ class Snake extends FlxGroup
 					// use the previous position from the array
 					tails.x = prevPositions[snakeBody.members.indexOf(member)][0];
 					tails.y = prevPositions[snakeBody.members.indexOf(member)][1];
-					tails.color = tailColor;
 				}
 				if (FlxCollision.pixelPerfectCheck(snakeHead, tails))
 				{
@@ -94,7 +93,8 @@ class Snake extends FlxGroup
 	{
 		var tailSquare:FlxSprite = new FlxSprite();
 		tailSquare.makeGraphic(Constants.TILE_SIZE, Constants.TILE_SIZE);
-		tailSquare.color = FlxColor.TRANSPARENT;
+		tailSquare.x = -100;
+		tailSquare.color = tailColor;
 		snakeBody.add(tailSquare);
 	}
 

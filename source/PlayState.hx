@@ -3,9 +3,11 @@ package;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxState;
+import flixel.FlxSubState;
 import flixel.group.FlxSpriteGroup;
 import flixel.sound.FlxSound;
 import flixel.text.FlxText;
+import flixel.ui.FlxButton;
 import flixel.util.FlxCollision;
 import flixel.util.FlxColor;
 import openfl.filters.ShaderFilter;
@@ -98,6 +100,10 @@ class PlayState extends FlxState
 				_appleSpawnTimer = 0;
 			}
 		}
+		else
+		{
+			openSubState(new GamerOver());
+		}
 
 		#if SHADERS_ALLOWED
 		// Update The CRT Shader...
@@ -135,5 +141,30 @@ class PlayState extends FlxState
 			else if (FlxG.keys.anyJustPressed([S, DOWN]) && snake.direction != UP)
 				snake.direction = DOWN;
 		}
+	}
+}
+
+class GamerOver extends FlxSubState
+{
+	var explosion:FlxSound;
+
+	public function new()
+	{
+		super(0x33000000);
+	}
+
+	override function create()
+	{
+		super.create();
+		explosion = FlxG.sound.load(AssetPaths.explosion__ogg);
+		var button = new FlxButton(0, 0, "Main Menu.", closeSub);
+		button.screenCenter();
+		explosion.play();
+		add(button);
+	}
+
+	private function closeSub():Void
+	{
+		FlxG.resetGame();
 	}
 }

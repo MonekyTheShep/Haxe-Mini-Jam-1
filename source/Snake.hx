@@ -27,9 +27,8 @@ class Snake extends FlxGroup
 	var snakeBody:FlxGroup = new FlxGroup();
 	var prevPositions:Array<Array<Float>> = [];
 
-	var explosion:FlxSound;
+
 	public var gameOver:Bool = false;
-	var hasPlayed:Bool = false;
 
 	public var direction:Null<SnakeDirection> = null;
 
@@ -41,7 +40,7 @@ class Snake extends FlxGroup
 		snakeHead.makeGraphic(Constants.TILE_SIZE, Constants.TILE_SIZE);
 		snakeHead.setPosition(x, y);
 		snakeHead.color = snakeColor;
-		explosion = FlxG.sound.load(AssetPaths.explosion__ogg);
+
 		add(snakeHead);
 		add(snakeBody);
 		doTimer();
@@ -85,14 +84,6 @@ class Snake extends FlxGroup
 				{
 					gameOver = true;
 				}
-			}
-		}
-		else
-		{
-			if (hasPlayed != true)
-			{
-				explosion.play();
-				hasPlayed = true;
 			}
 		}
 

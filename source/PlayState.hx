@@ -57,7 +57,7 @@ class PlayState extends FlxState
 		FlxG.cameras.add(uiCamera, false);
 		FlxG.camera.pixelPerfectRender = FlxG.camera.pixelPerfectShake = true;
 
-		scoreText = new FlxText(10, 10, 0, "Score: ", 30);
+		scoreText = new FlxText(10, 10, 0, "Score: [0]", 30);
 		scoreText.cameras = [uiCamera];
 
 		add(new GridSprite(FlxColor.WHITE));
@@ -74,6 +74,7 @@ class PlayState extends FlxState
 		#end
 
 		FlxG.sound.playMusic(AssetPaths.retro_arcade_game_music_297305__ogg, 1, true);
+		appleGroup.add(new Apple());
 	}
 
 	/**
@@ -90,12 +91,25 @@ class PlayState extends FlxState
 		// Spawn the apples, every 2 seconds.
 		if (CAN_SPAWN_APPLES && !snake.gameOver)
 		{
-			_appleSpawnTimer += elapsed;
+			// _appleSpawnTimer += elapsed;
 
-			if (_appleSpawnTimer >= 2)
+			// if (_appleSpawnTimer >= 2)
+			// {
+			// 	appleGroup.add(new Apple());
+			// 	_appleSpawnTimer = 0;
+			// }
+
+			for (apple in appleGroup.members)
 			{
-				appleGroup.add(new Apple());
-				_appleSpawnTimer = 0;
+				@:privateAccess for (snakeBody in snake.snakeBody.members)
+				{
+					if (apple != null && snakeBody != null && FlxCollision.pixelPerfectCheck(apple, snakeBody))
+					{
+						appleGroup.remove(apple);
+						apple.kill();
+						apple.destroy();
+					}
+				}
 			}
 		}
 		else
@@ -117,6 +131,7 @@ class PlayState extends FlxState
 		{
 			if (spr != null && FlxCollision.pixelPerfectCheck(snake.snakeHead, spr))
 			{
+				appleGroup.add(new Apple());
 				snake.grow();
 				score++;
 				// scoreText.text = 'Score: {$score}';
@@ -154,6 +169,7 @@ class GamerOver extends FlxSubState
 	override function create()
 	{
 		super.create();
+		FlxG.camera.shake(1, .5);
 		explosion = FlxG.sound.load(AssetPaths.explosion__ogg);
 		var button = new FlxButton(0, 0, "Main Menu.", closeSub);
 		button.screenCenter();

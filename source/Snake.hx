@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
+import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 import flixel.sound.FlxSound;
 import flixel.util.FlxCollision;
 import flixel.util.FlxColor;
@@ -23,8 +24,9 @@ class Snake extends FlxGroup
 {
 	var snakeColor = FlxColor.GREEN;
 	var tailColor = FlxColor.RED;
-	public var snakeHead:FlxSprite = new FlxSprite();
-	var snakeBody:FlxGroup = new FlxGroup();
+	public var snakeHead:FlxSprite;
+
+	var snakeBody:FlxTypedSpriteGroup<FlxSprite>;
 	var prevPositions:Array<Array<Float>> = [];
 
 
@@ -37,12 +39,11 @@ class Snake extends FlxGroup
 		super();
 
 		this.direction = direction;
+		add(snakeHead = new FlxSprite());
 		snakeHead.makeGraphic(Constants.TILE_SIZE, Constants.TILE_SIZE);
 		snakeHead.setPosition(x, y);
 		snakeHead.color = snakeColor;
-
-		add(snakeHead);
-		add(snakeBody);
+		add(snakeBody = new FlxTypedSpriteGroup<FlxSprite>());
 		doTimer();
 
 	}

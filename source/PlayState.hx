@@ -19,7 +19,15 @@ class PlayState extends FlxState
 	var collectApple:FlxSound;
 	var uiCamera:FlxCamera;
 	var scoreText:FlxText;
-	var score = 0;
+	var score(default, set):Int = 0;
+
+	@:noCompletion function set_score(e):Int
+	{
+		scoreText.text = 'Score: {$e}';
+		return score = e;
+	}
+
+
 	#if SHADERS_ALLOWED
 	/**
 	 * The CRT shader.
@@ -45,7 +53,7 @@ class PlayState extends FlxState
 		FlxG.cameras.add(uiCamera, false);
 		FlxG.camera.pixelPerfectRender = FlxG.camera.pixelPerfectShake = true;
 
-		scoreText = new FlxText(10, 10, null, "Score: ", 30);
+		scoreText = new FlxText(10, 10, 0, "Score: ", 30);
 		scoreText.cameras = [uiCamera];
 
 		add(new GridSprite(FlxColor.WHITE));
@@ -78,18 +86,14 @@ class PlayState extends FlxState
 	{
 		super.update(elapsed);
 		// Spawn the apples, every 2 seconds.
-		if (CAN_SPAWN_APPLES)
+		if (CAN_SPAWN_APPLES && !snake.gameOver)
 		{
 			_appleSpawnTimer += elapsed;
 
 			if (_appleSpawnTimer >= 2)
 			{
-				if (snake.gameOver != true)
-				{
-					appleGroup.add(new Apple());
-					_appleSpawnTimer = 0;
-				}
-
+				appleGroup.add(new Apple());
+				_appleSpawnTimer = 0;
 			}
 		}
 
@@ -108,8 +112,8 @@ class PlayState extends FlxState
 			if (spr != null && FlxCollision.pixelPerfectCheck(snake.snakeHead, spr))
 			{
 				snake.grow();
-				score += 1;
-				scoreText.text = 'Score: {$score}';
+				score++;
+				// scoreText.text = 'Score: {$score}';
 				collectApple.play();
 				appleGroup.remove(spr);
 				spr.kill();

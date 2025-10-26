@@ -108,7 +108,7 @@ class Menu extends FlxState
 	{
 		if (items.length <= 0) return;
 		curSelected = FlxMath.wrap(curSelected + v, 0, items.length - 1);
-		items.forEach(_ -> _.color = _.ID == curSelected ? FlxColor.BLUE : FlxColor.WHITE);
+		items.forEach(_ -> _.color = _.ID == curSelected ? FlxColor.RED : FlxColor.WHITE);
 
 	}
 }

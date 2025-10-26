@@ -164,5 +164,6 @@ class GamerOver extends FlxSubState
 	private function closeSub():Void
 	{
 		FlxG.resetGame();
+		Menu.shadersEnabled = true;
 	}
 }

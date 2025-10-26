@@ -103,11 +103,15 @@ class PlayState extends FlxState
 			{
 				@:privateAccess for (snakeBody in snake.snakeBody.members)
 				{
-					if (apple != null && snakeBody != null && FlxCollision.pixelPerfectCheck(apple, snakeBody))
+					if (apple != null
+						&& snakeBody != null
+						&& FlxCollision.pixelPerfectCheck(apple, snakeBody)
+						&& FlxCollision.pixelPerfectCheck(apple, snake.snakeHead))
 					{
 						appleGroup.remove(apple);
 						apple.kill();
 						apple.destroy();
+						appleGroup.add(apple);
 					}
 				}
 			}

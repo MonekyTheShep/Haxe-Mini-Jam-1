@@ -12,6 +12,7 @@ import flixel.util.FlxSpriteUtil;
 import flixel.util.FlxTimer;
 import haxe.display.Display.SignatureItemKind;
 
+// your enum snake direction
 enum SnakeDirection
 {
 	LEFT;
@@ -22,16 +23,19 @@ enum SnakeDirection
 
 class Snake extends FlxGroup
 {
+	// snake color wowwww
 	var snakeColor = FlxColor.GREEN;
 	var tailColor = FlxColor.RED;
+	// snake parts
 	public var snakeHead:FlxSprite;
-
 	var snakeBody:FlxTypedSpriteGroup<FlxSprite>;
+	// prev positions storey variable
 	var prevPositions:Array<Array<Float>> = [];
 
-
+	// game over boolean
 	public var gameOver:Bool = false;
 
+	// direction
 	public var direction:Null<SnakeDirection> = null;
 
 	public function new(x:Float = 0, y:Float = 0, ?direction:SnakeDirection = RIGHT)
@@ -39,16 +43,18 @@ class Snake extends FlxGroup
 		super();
 
 		this.direction = direction;
-		add(snakeHead = new FlxSprite());
+		// set snakehead shit
 		snakeHead.makeGraphic(Constants.TILE_SIZE, Constants.TILE_SIZE);
 		snakeHead.setPosition(x, y);
 		snakeHead.color = snakeColor;
+		// add them wowie
+		add(snakeHead = new FlxSprite());
 		add(snakeBody = new FlxTypedSpriteGroup<FlxSprite>());
 		doTimer();
 
 	}
 
-
+	// your movement timer
 	public var movementInterval:Float = 8;
 
 	private function doTimer(?tmr:FlxTimer):Void
@@ -66,7 +72,7 @@ class Snake extends FlxGroup
 	@:noCompletion override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
-		// loop through snakebody members
+		// loop through snakebody members until gameover is not true
 		if (gameOver != true)
 		{
 			for (member in snakeBody.members)
@@ -81,6 +87,7 @@ class Snake extends FlxGroup
 					tails.x = prevPositions[snakeBody.members.indexOf(member)][0];
 					tails.y = prevPositions[snakeBody.members.indexOf(member)][1];
 				}
+				// collision check for the tails to the head wowwww
 				if (FlxCollision.pixelPerfectCheck(snakeHead, tails))
 				{
 					gameOver = true;
@@ -89,7 +96,7 @@ class Snake extends FlxGroup
 		}
 
 	}
-
+	// snake grow function to add to the snakebody
 	public function grow()
 	{
 		var tailSquare:FlxSprite = new FlxSprite();
@@ -99,6 +106,7 @@ class Snake extends FlxGroup
 		snakeBody.add(tailSquare);
 	}
 
+	// move function which is called every 200ms for the snakehead to move
 	function move():Void
 	{
 		// every 200 ms this move function is called, so use it to store the previous values + the head

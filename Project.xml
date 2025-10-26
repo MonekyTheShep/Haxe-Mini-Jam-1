@@ -91,4 +91,12 @@
 	<!-- _________________________________ Custom _______________________________ -->
 
 	<!--Place custom nodes like icons here-->
+	<icon path="assets/images/favicon.ico"/>
+	<icon path="assets/images/favicon-16x16.png" size="16"/>
+	<icon path="assets/images/favicon-32x32.png" size="32"/>
+	<icon path="assets/images/android-chrome-192x192.png" size="192"/>
+	<icon path="assets/images/android-chrome-512x512.png" size="512"/>
+
+
+
 </project>

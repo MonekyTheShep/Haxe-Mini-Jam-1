@@ -61,6 +61,7 @@ class Menu extends FlxState
 		{
 			FlxG.sound.playMusic(AssetPaths.mainmenu__ogg, 1, true);
 		}
+		changeItem();
 	}
 
 	public function accept():Void

@@ -8,14 +8,13 @@ import flixel.tweens.FlxTween;
 class Apple extends FlxSprite
 {
 	var tween:FlxTween;
-	public function new()
+	public function new(x:Float, y:Float)
 	{
 		super();
 		// makeGraphic(Constants.TILE_SIZE, Constants.TILE_SIZE, FlxColor.RED);
 		loadGraphic("assets/images/apple.png");
-		final padding:Int = Constants.TILE_SIZE * 2;
-		this.x = (FlxG.random.int(Std.int(padding / Constants.TILE_SIZE), Std.int((FlxG.width - padding) / Constants.TILE_SIZE) - 1)) * Constants.TILE_SIZE;
-		this.y = (FlxG.random.int(Std.int(padding / Constants.TILE_SIZE), Std.int((FlxG.height - padding) / Constants.TILE_SIZE) - 1)) * Constants.TILE_SIZE;
+		this.x = x;
+		this.y = y;
 		FlxTween.tween(this, {x: this.x, y: this.y - 2}, 4, {
 			type: PINGPONG,
 			ease: FlxEase.quadInOut,

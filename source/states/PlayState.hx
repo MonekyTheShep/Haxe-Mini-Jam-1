@@ -6,6 +6,7 @@ import flixel.FlxGame;
 import flixel.FlxState;
 import flixel.FlxSubState;
 import flixel.group.FlxSpriteGroup;
+import flixel.math.FlxPoint;
 import flixel.sound.FlxSound;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
@@ -78,13 +79,15 @@ class PlayState extends FlxState
 		#end
 
 		FlxG.sound.playMusic(AssetPaths.retro_arcade_game_music_297305__ogg, 1, true);
-		appleGroup.add(new Apple());
+		final padding:Int = Constants.TILE_SIZE * 2;
+		var randomPos = randomPosition();
+		appleGroup.add(new Apple(randomPos.x, randomPos.y));
+
 	}
 
 	/**
 	 * Whether you can spawn apples or not...
 	 */
-	var CAN_SPAWN_APPLES:Bool = true;
 
 	@:noCompletion var _prevElapsed:Float = 0;
 	@:noCompletion var _appleSpawnTimer:Float = 0;
@@ -93,8 +96,25 @@ class PlayState extends FlxState
 	{
 		super.update(elapsed);
 		// Spawn the apples, every 2 seconds.
-		if (CAN_SPAWN_APPLES && !snake.gameOver)
+		if (snake.gameOver != true)
 		{
+			// Handle Apple Collisions...
+			appleGroup.forEachAlive((spr:Apple) ->
+			{
+				if (spr != null && FlxCollision.pixelPerfectCheck(snake.snakeHead, spr))
+				{
+					var randomPos = randomPosition();
+					appleGroup.add(new Apple(randomPos.x, randomPos.y));
+
+					snake.grow();
+					score++;
+					// scoreText.text = 'Score: {$score}';
+					collectApple.play();
+					appleGroup.remove(spr);
+					spr.kill();
+					spr.destroy();
+				}
+			});
 			// _appleSpawnTimer += elapsed;
 
 			// if (_appleSpawnTimer >= 2)
@@ -115,7 +135,9 @@ class PlayState extends FlxState
 						appleGroup.remove(apple);
 						apple.kill();
 						apple.destroy();
-						appleGroup.add(apple);
+						final padding:Int = Constants.TILE_SIZE * 2;
+						var randomPos = randomPosition();
+						appleGroup.add(new Apple(randomPos.x, randomPos.y));
 					}
 				}
 			}
@@ -134,22 +156,6 @@ class PlayState extends FlxState
 		}
 		#end
 
-		// Handle Apple Collisions...
-		appleGroup.forEachAlive((spr:Apple) ->
-		{
-			if (spr != null && FlxCollision.pixelPerfectCheck(snake.snakeHead, spr))
-			{
-				appleGroup.add(new Apple());
-				snake.grow();
-				score++;
-				// scoreText.text = 'Score: {$score}';
-				collectApple.play();
-				appleGroup.remove(spr);
-				spr.kill();
-				spr.destroy();
-			}
-		});
-
 		// Handle Movement...
 		if (snake != null)
 		{
@@ -163,6 +169,16 @@ class PlayState extends FlxState
 				snake.direction = DOWN;
 		}
 	}
+	function randomPosition():FlxPoint
+	{
+		final padding:Int = Constants.TILE_SIZE * 2;
+		var x:Float = (FlxG.random.int(Std.int(padding / Constants.TILE_SIZE),
+			Std.int((FlxG.width - padding) / Constants.TILE_SIZE) - 1)) * Constants.TILE_SIZE;
+		var y:Float = (FlxG.random.int(Std.int(padding / Constants.TILE_SIZE),
+			Std.int((FlxG.height - padding) / Constants.TILE_SIZE) - 1)) * Constants.TILE_SIZE;
+		return FlxPoint.get(x, y);
+	}
+		
 }
 
 class GamerOver extends FlxSubState

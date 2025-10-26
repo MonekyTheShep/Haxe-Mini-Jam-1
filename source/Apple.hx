@@ -16,7 +16,7 @@ class Apple extends FlxSprite
 		loadGraphic("assets/images/apple.png");
 		this.x = (FlxG.random.int(0, Std.int(FlxG.width / Constants.TILE_SIZE) - 1)) * Constants.TILE_SIZE;
 		this.y = (FlxG.random.int(0, Std.int(FlxG.height / Constants.TILE_SIZE) - 1)) * Constants.TILE_SIZE;
-		FlxTween.tween(this, {x: this.x, y: this.y - 2}, 2, {
+		FlxTween.tween(this, {x: this.x, y: this.y - 2}, 4, {
 			type: PINGPONG,
 			ease: FlxEase.quadInOut,
 			startDelay: 0,

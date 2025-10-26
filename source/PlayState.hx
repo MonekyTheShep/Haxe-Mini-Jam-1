@@ -2,6 +2,7 @@ package;
 
 import flixel.FlxCamera;
 import flixel.FlxG;
+import flixel.FlxGame;
 import flixel.FlxState;
 import flixel.FlxSubState;
 import flixel.group.FlxSpriteGroup;
@@ -72,10 +73,7 @@ class PlayState extends FlxState
 		}
 		#end
 
-		if (FlxG.sound.music == null)
-		{
-			FlxG.sound.playMusic(AssetPaths.retro_arcade_game_music_297305__ogg, 1, true);
-		}
+		FlxG.sound.playMusic(AssetPaths.retro_arcade_game_music_297305__ogg, 1, true);
 	}
 
 	/**

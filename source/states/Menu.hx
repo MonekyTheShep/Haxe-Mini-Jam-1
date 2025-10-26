@@ -57,6 +57,10 @@ class Menu extends FlxState
 			txt.ID = i;
 			items.add(txt);
 		}
+		if (FlxG.sound.music == null)
+		{
+			FlxG.sound.playMusic(AssetPaths.mainmenu__ogg, 1, true);
+		}
 	}
 
 	public function accept():Void

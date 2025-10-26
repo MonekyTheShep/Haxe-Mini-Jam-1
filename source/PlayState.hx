@@ -9,6 +9,7 @@ import flixel.text.FlxText;
 import flixel.util.FlxCollision;
 import flixel.util.FlxColor;
 import openfl.filters.ShaderFilter;
+import states.Menu;
 
 class PlayState extends FlxState
 {
@@ -16,6 +17,7 @@ class PlayState extends FlxState
 	 * The Snake Player Thingy...
 	 */
 	var snake:Snake;
+
 	var collectApple:FlxSound;
 	var uiCamera:FlxCamera;
 	var scoreText:FlxText;
@@ -26,7 +28,6 @@ class PlayState extends FlxState
 		scoreText.text = 'Score: {$e}';
 		return score = e;
 	}
-
 
 	#if SHADERS_ALLOWED
 	/**
@@ -60,18 +61,19 @@ class PlayState extends FlxState
 		add(appleGroup = new FlxTypedSpriteGroup<Apple>());
 		add(snake = new Snake(FlxG.width / 2, FlxG.height / 2));
 		add(scoreText);
-		
+
 		#if SHADERS_ALLOWED
-		// Set the shader
-		FlxG.camera.filters = [new ShaderFilter(crt = new CrtShader())];
+		if (Menu.shadersEnabled)
+		{
+			// Set the shader
+			FlxG.camera.filters = [new ShaderFilter(crt = new CrtShader())];
+		}
 		#end
 
 		if (FlxG.sound.music == null)
 		{
 			FlxG.sound.playMusic(AssetPaths.retro_arcade_game_music_297305__ogg, 1, true);
 		}
-
-
 	}
 
 	/**
@@ -99,7 +101,7 @@ class PlayState extends FlxState
 
 		#if SHADERS_ALLOWED
 		// Update The CRT Shader...
-		if (crt != null && crt.iTime != null && crt.iTime.value != null)
+		if (Menu.shadersEnabled && crt != null && crt.iTime != null && crt.iTime.value != null)
 		{
 			crt.iTime.value[0] = _prevElapsed + elapsed;
 			_prevElapsed = crt.iTime.value[0];

@@ -54,8 +54,6 @@ class PlayState extends FlxState
 
 	@:dox(hide) override public function create()
 	{
-		new states.Menu();
-
 		super.create();
 		collectApple = FlxG.sound.load(AssetPaths.collectsound__ogg);
 

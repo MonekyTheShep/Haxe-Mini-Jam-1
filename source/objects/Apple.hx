@@ -15,12 +15,12 @@ class Apple extends FlxSprite
 		loadGraphic("assets/images/apple.png");
 		this.x = x;
 		this.y = y;
-		FlxTween.tween(this, {x: this.x, y: this.y - 2}, 4, {
-			type: PINGPONG,
-			ease: FlxEase.quadInOut,
-			startDelay: 0,
-			loopDelay: 0
-		});
+		// FlxTween.tween(this.offset, {x: 0, y: 2}, 5, {
+		// 	type: PINGPONG,
+		// 	ease: FlxEase.quadInOut,
+		// 	startDelay: 0,
+		// 	loopDelay: 1
+		// });
 		// tween = FlxTween.tween(this, {x: 0, y: 0}, 2);
 
 	}

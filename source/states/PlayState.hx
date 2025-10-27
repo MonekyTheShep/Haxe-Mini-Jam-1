@@ -135,6 +135,7 @@ class PlayState extends FlxState
 							randomPos = randomPosition();
 							newApple.x = randomPos.x;
 							newApple.y = randomPos.y;
+							trace("Moved Apple");
 						}
 					}
 

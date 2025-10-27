@@ -9,6 +9,8 @@ import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxPoint;
 import flixel.sound.FlxSound;
 import flixel.text.FlxText;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import flixel.ui.FlxButton;
 import flixel.util.FlxCollision;
 import flixel.util.FlxColor;
@@ -44,6 +46,7 @@ class PlayState extends FlxState
 	 */
 	var crt:CrtShader;
 	#end
+	var tween:FlxTween;
 
 	/**
 	 * The Apple collectable group.
@@ -81,7 +84,13 @@ class PlayState extends FlxState
 		FlxG.sound.playMusic(AssetPaths.retro_arcade_game_music_297305__ogg, 1, true);
 		final padding:Int = Constants.TILE_SIZE * 2;
 		var randomPos = randomPosition();
-		appleGroup.add(new Apple(randomPos.x, randomPos.y));
+		var startApple = new Apple(randomPos.x, randomPos.y);
+		FlxTween.tween(startApple.offset, {x: 0, y: 2}, 3, {
+			type: PINGPONG,
+			startDelay: 0,
+			loopDelay: 1
+		});
+		appleGroup.add(startApple);
 
 	}
 
@@ -104,6 +113,7 @@ class PlayState extends FlxState
 				if (spr != null && FlxCollision.pixelPerfectCheck(snake.snakeHead, spr))
 				{
 					// Create new apple
+
 					var randomPos = randomPosition();
 					var newApple = new Apple(randomPos.x, randomPos.y);
 
@@ -143,8 +153,13 @@ class PlayState extends FlxState
 					snake.grow();
 					score++;
 					collectApple.play();
+					FlxTween.tween(newApple.offset, {x: 0, y: 2}, 5, {
+						type: PINGPONG,
+						ease: FlxEase.quadInOut,
+						startDelay: 0,
+						loopDelay: 1
+					});
 					appleGroup.add(newApple);
-
 					appleGroup.remove(spr);
 					spr.kill();
 					spr.destroy();

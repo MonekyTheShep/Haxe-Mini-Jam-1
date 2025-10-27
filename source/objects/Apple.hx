@@ -7,7 +7,6 @@ import flixel.tweens.FlxTween;
 
 class Apple extends FlxSprite
 {
-	var tween:FlxTween;
 	public function new(x:Float, y:Float)
 	{
 		super();
@@ -15,13 +14,6 @@ class Apple extends FlxSprite
 		loadGraphic("assets/images/apple.png");
 		this.x = x;
 		this.y = y;
-		// FlxTween.tween(this.offset, {x: 0, y: 2}, 5, {
-		// 	type: PINGPONG,
-		// 	ease: FlxEase.quadInOut,
-		// 	startDelay: 0,
-		// 	loopDelay: 1
-		// });
-		// tween = FlxTween.tween(this, {x: 0, y: 0}, 2);
 
 	}
 

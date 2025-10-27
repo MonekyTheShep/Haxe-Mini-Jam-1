@@ -103,44 +103,52 @@ class PlayState extends FlxState
 			{
 				if (spr != null && FlxCollision.pixelPerfectCheck(snake.snakeHead, spr))
 				{
+					// Create new apple
 					var randomPos = randomPosition();
-					appleGroup.add(new Apple(randomPos.x, randomPos.y));
+					var newApple = new Apple(randomPos.x, randomPos.y);
 
+					// Keep moving apple until it's not colliding with snake
+					var validPosition = false;
+					while (validPosition != true)
+					{
+						validPosition = true; // assume okay until proven otherwise
+
+						// Check against head
+						if (FlxCollision.pixelPerfectCheck(newApple, snake.snakeHead))
+						{
+							validPosition = false;
+						}
+
+						// Check against body
+						@:privateAccess for (snakeBody in snake.snakeBody.members)
+						{
+							if (snakeBody != null && FlxCollision.pixelPerfectCheck(newApple, snakeBody))
+							{
+								validPosition = false;
+								break;
+							}
+						}
+
+						// If invalid, move apple again
+						if (validPosition != true)
+						{
+							randomPos = randomPosition();
+							newApple.x = randomPos.x;
+							newApple.y = randomPos.y;
+						}
+					}
+
+					// Once valid, add it to the game
 					snake.grow();
 					score++;
-					// scoreText.text = 'Score: {$score}';
 					collectApple.play();
+					appleGroup.add(newApple);
+
 					appleGroup.remove(spr);
 					spr.kill();
 					spr.destroy();
 				}
 			});
-			// _appleSpawnTimer += elapsed;
-
-			// if (_appleSpawnTimer >= 2)
-			// {
-			// 	appleGroup.add(new Apple());
-			// 	_appleSpawnTimer = 0;
-			// }
-
-			for (apple in appleGroup.members)
-			{
-				@:privateAccess for (snakeBody in snake.snakeBody.members)
-				{
-					if (apple != null
-						&& snakeBody != null
-						&& FlxCollision.pixelPerfectCheck(apple, snakeBody)
-						&& FlxCollision.pixelPerfectCheck(apple, snake.snakeHead))
-					{
-						appleGroup.remove(apple);
-						apple.kill();
-						apple.destroy();
-						final padding:Int = Constants.TILE_SIZE * 2;
-						var randomPos = randomPosition();
-						appleGroup.add(new Apple(randomPos.x, randomPos.y));
-					}
-				}
-			}
 		}
 		else
 		{

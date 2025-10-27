@@ -46,7 +46,6 @@ class PlayState extends FlxState
 	 */
 	var crt:CrtShader;
 	#end
-	var tween:FlxTween;
 
 	/**
 	 * The Apple collectable group.
@@ -85,11 +84,6 @@ class PlayState extends FlxState
 		final padding:Int = Constants.TILE_SIZE * 2;
 		var randomPos = randomPosition();
 		var startApple = new Apple(randomPos.x, randomPos.y);
-		FlxTween.tween(startApple.offset, {x: 0, y: 2}, 3, {
-			type: PINGPONG,
-			startDelay: 0,
-			loopDelay: 1
-		});
 		appleGroup.add(startApple);
 
 	}
@@ -153,12 +147,6 @@ class PlayState extends FlxState
 					snake.grow();
 					score++;
 					collectApple.play();
-					FlxTween.tween(newApple.offset, {x: 0, y: 2}, 5, {
-						type: PINGPONG,
-						ease: FlxEase.quadInOut,
-						startDelay: 0,
-						loopDelay: 1
-					});
 					appleGroup.add(newApple);
 					appleGroup.remove(spr);
 					spr.kill();

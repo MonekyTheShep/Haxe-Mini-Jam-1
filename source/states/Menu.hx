@@ -15,7 +15,7 @@ class Menu extends FlxState
 {
 	var background:FlxSprite;
 	var items:FlxTypedGroup<Text>;
-	var dPad:FlxVirtualDPadButtons = new FlxVirtualDPadButtons(FlxDPadMode.FULL);
+	var dPad:FlxVirtualPad = new FlxVirtualPad(FlxDPadMode.FULL, FlxActionMode.A);
 
 
     public static var shadersEnabled:Bool = true;
@@ -54,6 +54,7 @@ class Menu extends FlxState
 		dPad.y = FlxG.height - dPad.height;
 		add(dPad);
 		#end
+
 
 		for (i => v in options)
 		{
@@ -115,11 +116,16 @@ class Menu extends FlxState
 		{
 			changeItem(-1);
 		}
-		else if (dPad.getButton(LEFT).justPressed)
+		else if (dPad.getButton(DOWN).justPressed)
 		{
 			changeItem(1);
 		}
+		if (dPad.getButton(A).justPressed)
+		{
+			accept();
+		}
 		#end
+
 	}
 
 	@:noCompletion var curSelected:Int = 0;

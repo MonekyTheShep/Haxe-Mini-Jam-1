@@ -67,14 +67,16 @@ class PlayState extends FlxState
 		scoreText = new FlxText(10, 10, 0, "Score: [0]", 30);
 		scoreText.cameras = [uiCamera];
 
+		#if mobile
 		dPad.cameras = [uiCamera];
 		dPad.y = FlxG.height - dPad.height;
-
+		add(dPad);
+		#end
 		add(new GridSprite(FlxColor.WHITE));
 		add(appleGroup = new FlxTypedSpriteGroup<Apple>());
 		add(snake = new Snake(FlxG.width / 2, FlxG.height / 2));
 		add(scoreText);
-		add(dPad);
+
 		#if SHADERS_ALLOWED
 		if (Menu.shadersEnabled)
 		{
@@ -186,7 +188,7 @@ class PlayState extends FlxState
 		}
 		#end
 
-		#if android
+		#if mobile
 		// Handle Android Movement...
 		if (snake != null)
 		{

@@ -8,12 +8,15 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
+import flixel.ui.FlxVirtualPad;
 import flixel.util.FlxColor;
 
 class Menu extends FlxState
 {
 	var background:FlxSprite;
 	var items:FlxTypedGroup<Text>;
+	var dPad:FlxVirtualDPadButtons = new FlxVirtualDPadButtons(FlxDPadMode.FULL);
+
 
     public static var shadersEnabled:Bool = true;
 	var options:Array<TOptionsStruc> = [
@@ -40,12 +43,17 @@ class Menu extends FlxState
 	{
 		super.create();
 
+
 		add(background = new FlxSprite().loadGraphic(AssetPaths.background__png));
 		background.setGraphicSize(FlxG.width, FlxG.height);
 		background.screenCenter();
 		FlxTween.tween(background, {alpha: 1}, 1, {ease: FlxEase.quadInOut});
 
 		add(items = new FlxTypedGroup<Text>());
+		#if android
+		dPad.y = FlxG.height - dPad.height;
+		add(dPad);
+		#end
 
 		for (i => v in options)
 		{
@@ -82,7 +90,7 @@ class Menu extends FlxState
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-
+		#if desktop
 		if (FlxG.keys.anyJustPressed([W, UP]))
 		{
 			changeItem(-1);
@@ -100,6 +108,18 @@ class Menu extends FlxState
 		{
 			accept();
 		}
+		#end
+
+		#if android
+		if (dPad.getButton(UP).justPressed)
+		{
+			changeItem(-1);
+		}
+		else if (dPad.getButton(LEFT).justPressed)
+		{
+			changeItem(1);
+		}
+		#end
 	}
 
 	@:noCompletion var curSelected:Int = 0;

@@ -12,6 +12,7 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.ui.FlxButton;
+import flixel.ui.FlxVirtualPad;
 import flixel.util.FlxCollision;
 import flixel.util.FlxColor;
 import objects.Apple;
@@ -32,6 +33,7 @@ class PlayState extends FlxState
 	var uiCamera:FlxCamera;
 	var scoreText:FlxText;
 	var score(default, set):Int = 0;
+	var dPad:FlxVirtualDPadButtons = new FlxVirtualDPadButtons(FlxDPadMode.FULL);
 
 	@:noCompletion function set_score(e):Int
 	{
@@ -67,11 +69,14 @@ class PlayState extends FlxState
 		scoreText = new FlxText(10, 10, 0, "Score: [0]", 30);
 		scoreText.cameras = [uiCamera];
 
+		dPad.cameras = [uiCamera];
+		dPad.y = FlxG.height - dPad.height;
+
 		add(new GridSprite(FlxColor.WHITE));
 		add(appleGroup = new FlxTypedSpriteGroup<Apple>());
 		add(snake = new Snake(FlxG.width / 2, FlxG.height / 2));
 		add(scoreText);
-
+		add(dPad);
 		#if SHADERS_ALLOWED
 		if (Menu.shadersEnabled)
 		{
@@ -168,7 +173,8 @@ class PlayState extends FlxState
 		}
 		#end
 
-		// Handle Movement...
+		#if desktop
+		// Handle PC Movement...
 		if (snake != null)
 		{
 			if (FlxG.keys.anyJustPressed([A, LEFT]) && snake.direction != RIGHT)
@@ -180,6 +186,23 @@ class PlayState extends FlxState
 			else if (FlxG.keys.anyJustPressed([S, DOWN]) && snake.direction != UP)
 				snake.direction = DOWN;
 		}
+		#end
+
+		#if android
+		// Handle Android Movement...
+		if (snake != null)
+		{
+			if (dPad.getButton(LEFT).justPressed && snake.direction != RIGHT)
+				snake.direction = LEFT;
+			else if (dPad.getButton(RIGHT).justPressed && snake.direction != LEFT)
+				snake.direction = RIGHT;
+			else if (dPad.getButton(UP).justPressed && snake.direction != DOWN)
+				snake.direction = UP;
+			else if (dPad.getButton(DOWN).justPressed && snake.direction != UP)
+				snake.direction = DOWN;
+		}
+		#end
+
 	}
 	function randomPosition():FlxPoint
 	{

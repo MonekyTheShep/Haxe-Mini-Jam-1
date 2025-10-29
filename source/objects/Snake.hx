@@ -79,17 +79,12 @@ class Snake extends FlxGroup
 			// wait until previous position = the snakebody.length. It has -1 because snake body it includes the head.
 			if (prevPositions.length - 1 == snakeBody.length)
 			{
-				// loop through the indexes of snakebody.
-				for (i in 0...snakeBody.length)
+				for (i => tails in snakeBody.members)
 				{
-					// cast it to a variable to manipulate the x and y
-					var tails:FlxSprite = cast snakeBody.members[i];
+					// move it to the previous position
 					tails.x = prevPositions[i][0];
 					tails.y = prevPositions[i][1];
-				}
-				// tails collision check
-				for (tails in snakeBody.members)
-				{
+					// check the tail collision to the head
 					if (FlxCollision.pixelPerfectCheck(snakeHead, tails))
 					{
 						gameOver = true;

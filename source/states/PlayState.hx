@@ -57,7 +57,7 @@ class PlayState extends FlxState
 	@:dox(hide) override public function create()
 	{
 		super.create();
-		collectApple = FlxG.sound.load(AssetPaths.collectsound__ogg);
+
 
 		uiCamera = new FlxCamera();
 		uiCamera.bgColor = FlxColor.TRANSPARENT;
@@ -85,8 +85,11 @@ class PlayState extends FlxState
 		}
 		#end
 
+		// sounds
+		collectApple = FlxG.sound.load(AssetPaths.collectsound__ogg);
 		FlxG.sound.playMusic(AssetPaths.retro_arcade_game_music_297305__ogg, 1, true);
 		final padding:Int = Constants.TILE_SIZE * 2;
+		// add the first apple
 		var randomPos = randomPosition();
 		var startApple = new Apple(randomPos.x, randomPos.y);
 		appleGroup.add(startApple);
@@ -228,11 +231,13 @@ class GamerOver extends FlxSubState
 	override function create()
 	{
 		super.create();
-		FlxG.camera.shake(1, .5);
 		explosion = FlxG.sound.load(AssetPaths.explosion__ogg);
+		explosion.play();
+		FlxG.camera.shake(1, .5);
+		
 		var button = new FlxButton(0, 0, "Main Menu.", closeSub);
 		button.screenCenter();
-		explosion.play();
+
 		add(button);
 	}
 

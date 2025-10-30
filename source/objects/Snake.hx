@@ -26,9 +26,11 @@ class Snake extends FlxGroup
 	// snake color wowwww
 	var snakeColor = FlxColor.GREEN;
 	var tailColor = FlxColor.RED;
+
 	// snake parts
 	public var snakeHead:FlxSprite;
 	var snakeBody:FlxTypedSpriteGroup<FlxSprite>;
+
 	// prev positions storey variable
 	var prevPositions:Array<Array<Float>> = [];
 
@@ -43,14 +45,15 @@ class Snake extends FlxGroup
 		super();
 
 		this.direction = direction;
+
 		// set snakehead shit
-		add(snakeHead = new FlxSprite());
 		snakeHead.makeGraphic(Constants.TILE_SIZE, Constants.TILE_SIZE);
 		snakeHead.setPosition(x, y);
 		snakeHead.color = snakeColor;
-		// add them wowie
 
+		add(snakeHead = new FlxSprite());
 		add(snakeBody = new FlxTypedSpriteGroup<FlxSprite>());
+
 		doTimer();
 
 	}

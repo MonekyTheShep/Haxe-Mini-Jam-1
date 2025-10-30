@@ -91,7 +91,7 @@ class Menu extends FlxState
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-		#if desktop
+		#if !android
 		if (FlxG.keys.anyJustPressed([W, UP]))
 		{
 			changeItem(-1);

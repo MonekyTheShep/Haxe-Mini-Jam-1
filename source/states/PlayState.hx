@@ -173,7 +173,7 @@ class PlayState extends FlxState
 		}
 		#end
 
-		#if desktop
+		#if !android
 		// Handle PC Movement...
 		if (snake != null)
 		{
@@ -188,7 +188,7 @@ class PlayState extends FlxState
 		}
 		#end
 
-		#if mobile
+		#if android
 		// Handle Android Movement...
 		if (snake != null)
 		{

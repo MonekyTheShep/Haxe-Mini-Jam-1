@@ -1,8 +1,8 @@
-# snakey-html5
+# snakey-source
 
 > [!IMPORTANT]
 > Controls: **WASD**\
-> Source Code: **https://github.com/MonekyTheShep/Haxe-Mini-Jam-1/** \
+> HTML5 Source: **https://github.com/MonekyTheShep/snakey-html5/** \
 > Itch.io: **https://monekytheshep.itch.io/snakey/**
 
 ---

@@ -47,12 +47,14 @@ class Snake extends FlxGroup
 		this.direction = direction;
 
 		// set snakehead shit
+		add(snakeHead = new FlxSprite());
+		add(snakeBody = new FlxTypedSpriteGroup<FlxSprite>());
+
 		snakeHead.makeGraphic(Constants.TILE_SIZE, Constants.TILE_SIZE);
 		snakeHead.setPosition(x, y);
 		snakeHead.color = snakeColor;
 
-		add(snakeHead = new FlxSprite());
-		add(snakeBody = new FlxTypedSpriteGroup<FlxSprite>());
+
 
 		doTimer();
 

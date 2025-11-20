@@ -113,6 +113,7 @@ class Snake extends FlxGroup
 	// move function which is called every 200ms for the snakehead to move
 	function move():Void
 	{
+		// TODO improve array efficiency or replace it with linked lists
 		// every 200 ms this move function is called, so use it to store the previous values + the head
 		prevPositions = [];
 		prevPositions.push([snakeHead.x, snakeHead.y]);

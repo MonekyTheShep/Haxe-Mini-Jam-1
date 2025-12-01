@@ -2,7 +2,6 @@
 
 > [!IMPORTANT]
 > Controls: **WASD**\
-> HTML5 Source: **https://github.com/MonekyTheShep/snakey-html5/** \
 > Itch.io: **https://monekytheshep.itch.io/snakey/**
 
 ---

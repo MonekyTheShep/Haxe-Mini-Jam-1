@@ -2,15 +2,12 @@ package states;
 
 import flixel.FlxCamera;
 import flixel.FlxG;
-import flixel.FlxGame;
 import flixel.FlxState;
 import flixel.FlxSubState;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxPoint;
 import flixel.sound.FlxSound;
 import flixel.text.FlxText;
-import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
 import flixel.ui.FlxButton;
 import flixel.ui.FlxVirtualPad;
 import flixel.util.FlxCollision;
@@ -72,6 +69,7 @@ class PlayState extends FlxState
 		dPad.y = FlxG.height - dPad.height;
 		add(dPad);
 		#end
+
 		add(new GridSprite(FlxColor.WHITE));
 		add(appleGroup = new FlxTypedSpriteGroup<Apple>());
 		add(snake = new Snake(FlxG.width / 2, FlxG.height / 2));
@@ -88,6 +86,7 @@ class PlayState extends FlxState
 		// sounds
 		collectApple = FlxG.sound.load(AssetPaths.collectsound__ogg);
 		FlxG.sound.playMusic(AssetPaths.retro_arcade_game_music_297305__ogg, 1, true);
+
 		final padding:Int = Constants.TILE_SIZE * 2;
 		// add the first apple
 		var randomPos = randomPosition();
@@ -112,7 +111,7 @@ class PlayState extends FlxState
 			// Handle Apple Collisions...
 			appleGroup.forEachAlive((spr:Apple) ->
 			{
-				if (spr != null && FlxCollision.pixelPerfectCheck(snake.snakeHead, spr))
+				if (FlxCollision.pixelPerfectCheck(snake.snakeHead, spr))
 				{
 					// Create new apple
 
@@ -152,13 +151,17 @@ class PlayState extends FlxState
 					}
 
 					// Once valid, add it to the game
-					snake.grow();
 					score++;
 					collectApple.play();
+					snake.grow();
+					spr.kill();
+
+					spr.destroy();
+				
+
 					appleGroup.add(newApple);
 					appleGroup.remove(spr);
-					spr.kill();
-					spr.destroy();
+
 				}
 			});
 		}
@@ -166,6 +169,7 @@ class PlayState extends FlxState
 		{
 			openSubState(new GamerOver());
 		}
+
 
 		#if SHADERS_ALLOWED
 		// Update The CRT Shader...
@@ -175,6 +179,7 @@ class PlayState extends FlxState
 			_prevElapsed = crt.iTime.value[0];
 		}
 		#end
+
 
 		#if !android
 		// Handle PC Movement...
@@ -216,6 +221,7 @@ class PlayState extends FlxState
 			Std.int((FlxG.height - padding) / Constants.TILE_SIZE) - 1)) * Constants.TILE_SIZE;
 		return FlxPoint.get(x, y);
 	}
+
 		
 }
 

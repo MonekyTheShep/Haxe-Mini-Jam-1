@@ -4,13 +4,11 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
-import flixel.sound.FlxSound;
 import flixel.util.FlxCollision;
 import flixel.util.FlxColor;
 import flixel.util.FlxDestroyUtil;
 import flixel.util.FlxSpriteUtil;
 import flixel.util.FlxTimer;
-import haxe.display.Display.SignatureItemKind;
 
 // your enum snake direction
 enum SnakeDirection
@@ -54,8 +52,6 @@ class Snake extends FlxGroup
 		snakeHead.setPosition(x, y);
 		snakeHead.color = snakeColor;
 
-
-
 		doTimer();
 
 	}
@@ -71,6 +67,7 @@ class Snake extends FlxGroup
 			return;
 		}
 		new FlxTimer().start(movementInterval / FlxG.updateFramerate, doTimer);
+		lastPosition();
 		move();
 
 	}
@@ -79,7 +76,7 @@ class Snake extends FlxGroup
 	{
 		super.update(elapsed);
 		// loop through snakebody members until gameover is not true
-		if (gameOver != true)
+		if (!gameOver)
 		{
 			// wait until previous position = the snakebody.length. It has -1 because snake body it includes the head.
 			if (prevPositions.length - 1 == snakeBody.length)
@@ -100,6 +97,7 @@ class Snake extends FlxGroup
 		}
 
 	}
+
 	// snake grow function to add to the snakebody
 	public function grow()
 	{
@@ -107,24 +105,14 @@ class Snake extends FlxGroup
 		tailSquare.makeGraphic(Constants.TILE_SIZE, Constants.TILE_SIZE);
 		tailSquare.x = -100;
 		tailSquare.color = tailColor;
+
 		snakeBody.add(tailSquare);
 	}
 
 	// move function which is called every 200ms for the snakehead to move
 	function move():Void
 	{
-		// TODO improve array efficiency or replace it with linked lists
-		// every 200 ms this move function is called, so use it to store the previous values + the head
-		prevPositions = [];
-		prevPositions.push([snakeHead.x, snakeHead.y]);
 
-		// store the tail body positions.
-		for (member in snakeBody.members)
-		{
-			var tails:FlxSprite = cast member;
-			prevPositions.push([tails.x, tails.y]);
-		}
-		
 		if (direction != null && gameOver != true)
 		{
 			switch (direction)
@@ -139,6 +127,21 @@ class Snake extends FlxGroup
 					snakeHead.y += Constants.TILE_SIZE;
 			}
 			FlxSpriteUtil.screenWrap(snakeHead);
+		}
+	}
+	// store last moved position
+	function lastPosition():Void
+	{
+		prevPositions = [];
+
+		// add the head position
+		prevPositions.push([snakeHead.x, snakeHead.y]);
+
+		// store the tail body positions.
+		for (member in snakeBody.members)
+		{
+			var tails:FlxSprite = cast member;
+			prevPositions.push([tails.x, tails.y]);
 		}
 	}
 }

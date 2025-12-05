@@ -32,6 +32,8 @@ class Snake extends FlxGroup
 	// prev positions storey variable
 	var prevPositions:Array<Array<Float>> = [];
 
+	var timer:FlxTimer;
+
 	// game over boolean
 	public var gameOver:Bool = false;
 
@@ -52,6 +54,8 @@ class Snake extends FlxGroup
 		snakeHead.setPosition(x, y);
 		snakeHead.color = snakeColor;
 
+		timer = new FlxTimer().start(movementInterval / FlxG.updateFramerate, doTimer);
+
 		doTimer();
 
 	}
@@ -66,9 +70,10 @@ class Snake extends FlxGroup
 			tmr = FlxDestroyUtil.destroy(tmr);
 			return;
 		}
-		new FlxTimer().start(movementInterval / FlxG.updateFramerate, doTimer);
+
 		lastPosition();
 		move();
+		timer.start(movementInterval / FlxG.updateFramerate, doTimer);
 
 	}
 

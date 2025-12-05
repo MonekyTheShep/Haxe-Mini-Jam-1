@@ -114,7 +114,7 @@ class Snake extends FlxGroup
 		snakeBody.add(tailSquare);
 	}
 
-	// move function which is called every 200ms for the snakehead to move
+	// move the snake and do screen wrapping
 	function move():Void
 	{
 

@@ -1,0 +1,1 @@
+Somehow detect html5 client being pc or mobile

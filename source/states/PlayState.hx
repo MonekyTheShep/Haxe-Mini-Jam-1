@@ -18,6 +18,9 @@ import objects.Snake;
 import objects.shaders.CrtShader;
 import openfl.filters.ShaderFilter;
 import states.Menu;
+#if js
+import js.Browser;
+#end
 
 class PlayState extends FlxState
 {
@@ -115,8 +118,22 @@ class PlayState extends FlxState
 				appleHandling.moveApple();
 				snake.grow();
 			}
-			var inputHandling:InputHandling = new InputHandling(snake);
+			#if android
+			var inputHandling:InputHandling = new InputHandling(snake, dPad);
+			#elseif desktop
+			var inputHandling:InputHandling = new InputHandling(snake, null);
+			#end
+
+			// user agent for mobile js platforms
+			#if js
+			if (!StringTools.contains(Browser.navigator.userAgent, "Mobile"))
+			{
+				var inputHandling:InputHandling = new InputHandling(snake, dPad);
+				inputHandling.input();
+			}
+			#else
 			inputHandling.input();
+			#end
 		}
 		else
 		{
@@ -225,16 +242,49 @@ class CollisionHandling
 class InputHandling
 {
 	var snake:Snake;
+	var dPad:FlxVirtualDPadButtons;
 
-	public function new(snake:Snake)
+	public function new(snake:Snake, dPad:FlxVirtualDPadButtons)
 	{
 		this.snake = snake;
+		this.dPad = dPad;
 	}
 
 	public function input():Void
 	{
-		#if !android
+		#if js
 		// Handle PC Movement...
+		if (!StringTools.contains(Browser.navigator.userAgent, "Mobile"))
+		{
+			if (snake != null)
+			{
+				if (dPad.getButton(LEFT).justPressed && snake.direction != RIGHT)
+					snake.direction = LEFT;
+				else if (dPad.getButton(RIGHT).justPressed && snake.direction != LEFT)
+					snake.direction = RIGHT;
+				else if (dPad.getButton(UP).justPressed && snake.direction != DOWN)
+					snake.direction = UP;
+				else if (dPad.getButton(DOWN).justPressed && snake.direction != UP)
+					snake.direction = DOWN;
+			}
+		}
+		else
+		{
+		if (snake != null)
+		{
+			if (FlxG.keys.anyJustPressed([A, LEFT]) && snake.direction != RIGHT)
+				snake.direction = LEFT;
+			else if (FlxG.keys.anyJustPressed([D, RIGHT]) && snake.direction != LEFT)
+				snake.direction = RIGHT;
+			else if (FlxG.keys.anyJustPressed([W, UP]) && snake.direction != DOWN)
+				snake.direction = UP;
+			else if (FlxG.keys.anyJustPressed([S, DOWN]) && snake.direction != UP)
+				snake.direction = DOWN;
+		}
+		}
+		#end
+
+		#if desktop
 		if (snake != null)
 		{
 			if (FlxG.keys.anyJustPressed([A, LEFT]) && snake.direction != RIGHT)
@@ -247,6 +297,7 @@ class InputHandling
 				snake.direction = DOWN;
 		}
 		#end
+
 
 		#if android
 		// Handle Android Movement...
@@ -262,6 +313,7 @@ class InputHandling
 				snake.direction = DOWN;
 		}
 		#end
+
 	}
 }
 

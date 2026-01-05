@@ -25,6 +25,8 @@ class Snake extends FlxGroup
 	var snakeColor = FlxColor.GREEN;
 	var tailColor = FlxColor.RED;
 
+	var rainbowColors:Array<FlxColor> = [FlxColor.RED, FlxColor.BLUE, FlxColor.GREEN, FlxColor.ORANGE, FlxColor.YELLOW];
+	
 	// snake parts
 	public var snakeHead:FlxSprite;
 	public var snakeBody:FlxTypedSpriteGroup<FlxSprite>;
@@ -111,6 +113,7 @@ class Snake extends FlxGroup
 		// move tail square to end of snake
 		tailSquare.x = prevPositions[prevPositions.length - 1][0];
 		tailSquare.y = prevPositions[prevPositions.length - 1][1];
+
 		tailSquare.color = tailColor;
 
 		snakeBody.add(tailSquare);

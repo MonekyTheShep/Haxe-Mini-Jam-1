@@ -121,7 +121,7 @@ class PlayState extends FlxState
 
 			// user agent for mobile js platforms
 			#if js
-			if (!StringTools.contains(Browser.navigator.userAgent, "Mobile"))
+			if (StringTools.contains(Browser.navigator.userAgent, "Mobile"))
 			{
 				var inputHandling:InputHandling = new InputHandling(snake, dPad);
 				inputHandling.input();

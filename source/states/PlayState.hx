@@ -101,12 +101,7 @@ class PlayState extends FlxState
 
 	}
 
-	/**
-	 * Whether you can spawn apples or not...
-	 */
-
 	@:noCompletion var _prevElapsed:Float = 0;
-	@:noCompletion var _appleSpawnTimer:Float = 0;
 
 	@:dox(hide) override public function update(elapsed:Float):Void
 	{

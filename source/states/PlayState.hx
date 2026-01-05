@@ -51,11 +51,6 @@ class PlayState extends FlxState
 	var crt:CrtShader;
 	#end
 
-	/**
-	 * The Apple collectable group.
-	 */
-	var appleGroup:FlxTypedSpriteGroup<Apple>;
-
 	@:dox(hide) override public function create()
 	{
 		super.create();

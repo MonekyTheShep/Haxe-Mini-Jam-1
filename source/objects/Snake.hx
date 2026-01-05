@@ -108,7 +108,9 @@ class Snake extends FlxGroup
 	{
 		var tailSquare:FlxSprite = new FlxSprite();
 		tailSquare.makeGraphic(Constants.TILE_SIZE, Constants.TILE_SIZE);
-		tailSquare.x = -100;
+		// move tail square to end of snake
+		tailSquare.x = prevPositions[prevPositions.length - 1][0];
+		tailSquare.y = prevPositions[prevPositions.length - 1][1];
 		tailSquare.color = tailColor;
 
 		snakeBody.add(tailSquare);

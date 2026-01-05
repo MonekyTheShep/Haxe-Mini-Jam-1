@@ -32,6 +32,7 @@ class PlayState extends FlxState
 	var scoreText:FlxText;
 	var score(default, set):Int = 0;
 	var dPad:FlxVirtualDPadButtons = new FlxVirtualDPadButtons(FlxDPadMode.FULL);
+	var collisionHandling:CollisionHandling;
 
 	@:noCompletion function set_score(e):Int
 	{
@@ -90,6 +91,7 @@ class PlayState extends FlxState
 
 		// add the first apple
 		apple = new Apple();
+		collisionHandling = new CollisionHandling(apple, snake);
 		appleHandling = new AppleHandling(apple, snake);
 		var randomPos = appleHandling.randomPosition();
 
@@ -111,7 +113,7 @@ class PlayState extends FlxState
 		super.update(elapsed);
 		if (snake.gameOver != true)
 		{
-			var collisionHandling:CollisionHandling = new CollisionHandling(apple, snake);
+
 			if (collisionHandling.isTouchingHead())
 			{
 				collectApple.play();

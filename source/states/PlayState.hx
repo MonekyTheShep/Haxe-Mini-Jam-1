@@ -36,6 +36,7 @@ class PlayState extends FlxState
 	var score(default, set):Int = 0;
 	var dPad:FlxVirtualDPadButtons = new FlxVirtualDPadButtons(FlxDPadMode.FULL);
 	var collisionHandling:CollisionHandling;
+	var inputHandling:InputHandling;
 
 	@:noCompletion function set_score(e):Int
 	{
@@ -93,6 +94,16 @@ class PlayState extends FlxState
 		appleHandling = new AppleHandling(apple, snake);
 		var randomPos = appleHandling.randomPosition();
 
+		#if android
+		inputHandling = new InputHandling(snake, dPad);
+		#elseif desktop
+		inputHandling = new InputHandling(snake, null);
+		#end
+
+		// user agent for mobile js platforms
+		#if js
+		inputHandling = new InputHandling(snake, null);
+		#end
 		apple.x = randomPos.x;
 		apple.y = randomPos.y;
 		add(apple);
@@ -112,23 +123,10 @@ class PlayState extends FlxState
 				collectApple.play();
 				appleHandling.moveApple();
 				snake.grow();
+				score += 1;
 			}
-			#if android
-			var inputHandling:InputHandling = new InputHandling(snake, dPad);
-			#elseif desktop
-			var inputHandling:InputHandling = new InputHandling(snake, null);
-			#end
 
-			// user agent for mobile js platforms
-			#if js
-			if (StringTools.contains(Browser.navigator.userAgent, "Mobile"))
-			{
-				var inputHandling:InputHandling = new InputHandling(snake, dPad);
-				inputHandling.input();
-			}
-			#else
 			inputHandling.input();
-			#end
 		}
 		else
 		{
@@ -248,23 +246,6 @@ class InputHandling
 	public function input():Void
 	{
 		#if js
-		// Handle PC Movement...
-		if (!StringTools.contains(Browser.navigator.userAgent, "Mobile"))
-		{
-			if (snake != null)
-			{
-				if (dPad.getButton(LEFT).justPressed && snake.direction != RIGHT)
-					snake.direction = LEFT;
-				else if (dPad.getButton(RIGHT).justPressed && snake.direction != LEFT)
-					snake.direction = RIGHT;
-				else if (dPad.getButton(UP).justPressed && snake.direction != DOWN)
-					snake.direction = UP;
-				else if (dPad.getButton(DOWN).justPressed && snake.direction != UP)
-					snake.direction = DOWN;
-			}
-		}
-		else
-		{
 		if (snake != null)
 		{
 			if (FlxG.keys.anyJustPressed([A, LEFT]) && snake.direction != RIGHT)
@@ -275,7 +256,6 @@ class InputHandling
 				snake.direction = UP;
 			else if (FlxG.keys.anyJustPressed([S, DOWN]) && snake.direction != UP)
 				snake.direction = DOWN;
-		}
 		}
 		#end
 

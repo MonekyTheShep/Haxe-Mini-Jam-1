@@ -27,7 +27,7 @@ class Snake extends FlxGroup
 
 	// snake parts
 	public var snakeHead:FlxSprite;
-	var snakeBody:FlxTypedSpriteGroup<FlxSprite>;
+	public var snakeBody:FlxTypedSpriteGroup<FlxSprite>;
 
 	// prev positions storey variable
 	var prevPositions:Array<Array<Float>> = [];

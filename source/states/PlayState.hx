@@ -25,7 +25,8 @@ class PlayState extends FlxState
 	 * The Snake Player Thingy...
 	 */
 	var snake:Snake;
-
+	var apple:Apple;
+	var appleHandling:AppleHandling;
 	var collectApple:FlxSound;
 	var uiCamera:FlxCamera;
 	var scoreText:FlxText;
@@ -71,7 +72,6 @@ class PlayState extends FlxState
 		#end
 
 		add(new GridSprite(FlxColor.WHITE));
-		add(appleGroup = new FlxTypedSpriteGroup<Apple>());
 		add(snake = new Snake(FlxG.width / 2, FlxG.height / 2));
 		add(scoreText);
 
@@ -87,11 +87,15 @@ class PlayState extends FlxState
 		collectApple = FlxG.sound.load(AssetPaths.collectsound__ogg);
 		FlxG.sound.playMusic(AssetPaths.retro_arcade_game_music_297305__ogg, 1, true);
 
-		final padding:Int = Constants.TILE_SIZE * 2;
+
 		// add the first apple
-		var randomPos = randomPosition();
-		var startApple = new Apple(randomPos.x, randomPos.y);
-		appleGroup.add(startApple);
+		apple = new Apple();
+		appleHandling = new AppleHandling(apple, snake);
+		var randomPos = appleHandling.randomPosition();
+
+		apple.x = randomPos.x;
+		apple.y = randomPos.y;
+		add(apple);
 
 	}
 
@@ -105,71 +109,22 @@ class PlayState extends FlxState
 	@:dox(hide) override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
-		// Spawn the apples, every 2 seconds.
 		if (snake.gameOver != true)
 		{
-			// Handle Apple Collisions...
-			appleGroup.forEachAlive((spr:Apple) ->
+			var collisionHandling:CollisionHandling = new CollisionHandling(apple, snake);
+			if (collisionHandling.isTouchingHead())
 			{
-				if (FlxCollision.pixelPerfectCheck(snake.snakeHead, spr))
-				{
-					// Create new apple
-
-					var randomPos = randomPosition();
-					var newApple = new Apple(randomPos.x, randomPos.y);
-
-					// Keep moving apple until it's not colliding with snake
-					var validPosition = false;
-					while (validPosition != true)
-					{
-						validPosition = true; // assume okay until proven otherwise
-
-						// Check against head
-						if (FlxCollision.pixelPerfectCheck(newApple, snake.snakeHead))
-						{
-							validPosition = false;
-						}
-
-						// Check against body
-						@:privateAccess for (snakeBody in snake.snakeBody.members)
-						{
-							if (snakeBody != null && FlxCollision.pixelPerfectCheck(newApple, snakeBody))
-							{
-								validPosition = false;
-								break;
-							}
-						}
-
-						// If invalid, move apple again
-						if (validPosition != true)
-						{
-							randomPos = randomPosition();
-							newApple.x = randomPos.x;
-							newApple.y = randomPos.y;
-							trace("Moved Apple");
-						}
-					}
-
-					// Once valid, add it to the game
-					score++;
-					collectApple.play();
-					snake.grow();
-					spr.kill();
-
-					spr.destroy();
-				
-
-					appleGroup.add(newApple);
-					appleGroup.remove(spr);
-
-				}
-			});
+				collectApple.play();
+				appleHandling.moveApple();
+				snake.grow();
+			}
+			var inputHandling:InputHandling = new InputHandling(snake);
+			inputHandling.input();
 		}
 		else
 		{
 			openSubState(new GamerOver());
 		}
-
 
 		#if SHADERS_ALLOWED
 		// Update The CRT Shader...
@@ -179,8 +134,108 @@ class PlayState extends FlxState
 			_prevElapsed = crt.iTime.value[0];
 		}
 		#end
+	}
+}
 
+class AppleHandling
+{
+	var apple:Apple;
+	var snake:Snake;
 
+	public function new(apple:Apple, snake:Snake)
+	{
+		this.apple = apple;
+		this.snake = snake;
+	}
+
+	public function moveApple()
+	{
+		var collisionHandling:CollisionHandling = new CollisionHandling(apple, snake);
+		var validPosition = false;
+		// makes sure the apple never spawns in the snake
+		while (validPosition != true)
+		{
+			validPosition = true; // assume okay until proven otherwise
+			if (collisionHandling.isTouchingBody())
+			{
+				validPosition = false;
+			}
+
+			if (collisionHandling.isTouchingHead())
+			{
+				validPosition = false;
+			}
+
+			if (!validPosition)
+			{
+				var randomPos = randomPosition();
+				apple.x = randomPos.x;
+				apple.y = randomPos.y;
+			}
+		}
+	}
+
+	// spawn apple at random location
+	public function randomPosition():FlxPoint
+	{
+		final padding:Int = Constants.TILE_SIZE * 2;
+		var x:Float = (FlxG.random.int(Std.int(padding / Constants.TILE_SIZE),
+			Std.int((FlxG.width - padding) / Constants.TILE_SIZE) - 1)) * Constants.TILE_SIZE;
+		var y:Float = (FlxG.random.int(Std.int(padding / Constants.TILE_SIZE),
+			Std.int((FlxG.height - padding) / Constants.TILE_SIZE) - 1)) * Constants.TILE_SIZE;
+		return FlxPoint.get(x, y);
+	}
+}
+
+class CollisionHandling
+{
+	var snake:Snake;
+	var apple:Apple;
+
+	public function new(apple:Apple, snake:Snake)
+	{
+		this.snake = snake;
+		this.apple = apple;
+	}
+
+	public function isTouchingHead():Bool
+	{
+		// Check against body
+
+		if (FlxCollision.pixelPerfectCheck(snake.snakeHead, apple))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	public function isTouchingBody():Bool
+	{
+		for (snakePart in snake.snakeBody.members)
+		{
+			if (snakePart != null && FlxCollision.pixelPerfectCheck(apple, snakePart))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+}
+
+class InputHandling
+{
+	var snake:Snake;
+
+	public function new(snake:Snake)
+	{
+		this.snake = snake;
+	}
+
+	public function input():Void
+	{
 		#if !android
 		// Handle PC Movement...
 		if (snake != null)
@@ -210,19 +265,7 @@ class PlayState extends FlxState
 				snake.direction = DOWN;
 		}
 		#end
-
 	}
-	function randomPosition():FlxPoint
-	{
-		final padding:Int = Constants.TILE_SIZE * 2;
-		var x:Float = (FlxG.random.int(Std.int(padding / Constants.TILE_SIZE),
-			Std.int((FlxG.width - padding) / Constants.TILE_SIZE) - 1)) * Constants.TILE_SIZE;
-		var y:Float = (FlxG.random.int(Std.int(padding / Constants.TILE_SIZE),
-			Std.int((FlxG.height - padding) / Constants.TILE_SIZE) - 1)) * Constants.TILE_SIZE;
-		return FlxPoint.get(x, y);
-	}
-
-		
 }
 
 class GamerOver extends FlxSubState

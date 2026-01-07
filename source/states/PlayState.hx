@@ -4,7 +4,6 @@ import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.FlxSubState;
-import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxPoint;
 import flixel.sound.FlxSound;
 import flixel.text.FlxText;
@@ -115,7 +114,7 @@ class PlayState extends FlxState
 	@:dox(hide) override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
-		if (snake.gameOver != true)
+		if (!snake.gameOver)
 		{
 
 			if (collisionHandling.isTouchingHead())

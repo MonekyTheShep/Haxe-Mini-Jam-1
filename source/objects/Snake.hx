@@ -150,7 +150,7 @@ class Snake extends FlxGroup
 		// store the tail body positions.
 		for (member in snakeBody.members)
 		{
-			var tails:FlxSprite = cast member;
+			var tails:FlxSprite = cast(member, FlxSprite);
 			prevPositions.push([tails.x, tails.y]);
 		}
 	}

@@ -159,7 +159,7 @@ class AppleHandling
 		var collisionHandling:CollisionHandling = new CollisionHandling(apple, snake);
 		var validPosition = false;
 		// makes sure the apple never spawns in the snake
-		while (validPosition != true)
+		while (!validPosition)
 		{
 			validPosition = true; // assume okay until proven otherwise
 			if (collisionHandling.isTouchingBody())

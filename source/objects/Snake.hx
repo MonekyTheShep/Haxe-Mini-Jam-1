@@ -32,7 +32,7 @@ class Snake extends FlxGroup
 	public var snakeBody:FlxTypedSpriteGroup<FlxSprite>;
 
 	// prev positions storey variable
-	var prevPositions:Array<Array<Float>> = [];
+	var prevPositions:Array<Array<Float>>;
 
 	var timer:FlxTimer;
 
@@ -54,7 +54,9 @@ class Snake extends FlxGroup
 
 		snakeHead.makeGraphic(Constants.TILE_SIZE, Constants.TILE_SIZE);
 		snakeHead.setPosition(x, y);
+		prevPositions = new Array<Array<Float>>();
 		snakeHead.color = snakeColor;
+
 
 		timer = new FlxTimer().start(movementInterval / FlxG.updateFramerate, doTimer);
 

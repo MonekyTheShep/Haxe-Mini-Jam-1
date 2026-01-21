@@ -117,7 +117,7 @@ class PlayState extends FlxState
 		if (!snake.gameOver)
 		{
 
-			if (collisionHandling.isTouchingHead())
+			if (collisionHandling.appleIsTouchingHead())
 			{
 				collectApple.play();
 				appleHandling.moveApple();
@@ -162,12 +162,12 @@ class AppleHandling
 		while (!validPosition)
 		{
 			validPosition = true; // assume okay until proven otherwise
-			if (collisionHandling.isTouchingBody())
+			if (collisionHandling.appleIsTouchingBody())
 			{
 				validPosition = false;
 			}
 
-			if (collisionHandling.isTouchingHead())
+			if (collisionHandling.appleIsTouchingBody())
 			{
 				validPosition = false;
 			}
@@ -204,7 +204,7 @@ class CollisionHandling
 		this.apple = apple;
 	}
 
-	public function isTouchingHead():Bool
+	public function appleIsTouchingHead():Bool
 	{
 		// Check against body
 
@@ -218,7 +218,7 @@ class CollisionHandling
 		}
 	}
 
-	public function isTouchingBody():Bool
+	public function appleIsTouchingBody():Bool
 	{
 		for (snakePart in snake.snakeBody.members)
 		{

@@ -129,7 +129,7 @@ class PlayState extends FlxState
 		}
 		else
 		{
-			openSubState(new GamerOver());
+			openSubState(new GameOver());
 		}
 
 		#if SHADERS_ALLOWED
@@ -291,7 +291,7 @@ class InputHandling
 	}
 }
 
-class GamerOver extends FlxSubState
+class GameOver extends FlxSubState
 {
 	var explosion:FlxSound;
 

@@ -92,7 +92,7 @@ class PlayState extends FlxState
 		// add the first apple
 		apple = new Apple();
 		collisionHandling = new CollisionHandling(apple, snake);
-		appleHandling = new AppleHandling(apple, snake);
+		appleHandling = new AppleHandling(apple, snake, collisionHandling);
 		var randomPos = appleHandling.randomPosition();
 
 		#if android

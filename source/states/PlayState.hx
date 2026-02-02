@@ -4,18 +4,17 @@ import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.FlxSubState;
-import flixel.math.FlxPoint;
 import flixel.sound.FlxSound;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.ui.FlxVirtualPad;
-import flixel.util.FlxCollision;
 import flixel.util.FlxColor;
 import objects.Apple;
 import objects.GridSprite;
 import objects.Snake;
 import objects.shaders.CrtShader;
 import openfl.filters.ShaderFilter;
+import states.GameOver;
 import states.Menu;
 import utility.AppleHandling;
 import utility.CollisionHandling;
@@ -137,8 +136,6 @@ class PlayState extends FlxState
 				accumulateDebounceTime = 0;
 				inputHandling.input();
 			}
-			
-
 		}
 		else
 		{
@@ -158,31 +155,3 @@ class PlayState extends FlxState
 
 
 
-class GameOver extends FlxSubState
-{
-	var explosion:FlxSound;
-
-	public function new()
-	{
-		super(0x33000000);
-	}
-
-	override function create()
-	{
-		super.create();
-		explosion = FlxG.sound.load(AssetPaths.explosion__ogg);
-		explosion.play();
-		FlxG.camera.shake(1, .5);
-		
-		var button = new FlxButton(0, 0, "Main Menu.", closeSub);
-		button.screenCenter();
-
-		add(button);
-	}
-
-	private function closeSub():Void
-	{
-		FlxG.resetGame();
-		Menu.shadersEnabled = true;
-	}
-}

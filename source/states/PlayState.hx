@@ -17,6 +17,9 @@ import objects.Snake;
 import objects.shaders.CrtShader;
 import openfl.filters.ShaderFilter;
 import states.Menu;
+import utility.AppleHandling;
+import utility.CollisionHandling;
+import utility.InputHandling;
 #if js
 import js.Browser;
 #end
@@ -153,153 +156,7 @@ class PlayState extends FlxState
 	}
 }
 
-class AppleHandling
-{
-	var apple:Apple;
-	var snake:Snake;
 
-	public function new(apple:Apple, snake:Snake)
-	{
-		this.apple = apple;
-		this.snake = snake;
-	}
-
-	public function moveApple()
-	{
-		var collisionHandling:CollisionHandling = new CollisionHandling(apple, snake);
-		var validPosition = false;
-		// makes sure the apple never spawns in the snake
-		while (!validPosition)
-		{
-			validPosition = true; // assume okay until proven otherwise
-			if (collisionHandling.appleIsTouchingHead())
-			{
-				validPosition = false;
-			}
-
-			if (collisionHandling.appleIsTouchingBody())
-			{
-				validPosition = false;
-			}
-
-			if (!validPosition)
-			{
-				var randomPos = randomPosition();
-				apple.x = randomPos.x;
-				apple.y = randomPos.y;
-			}
-		}
-	}
-
-	// spawn apple at random location
-	public function randomPosition():FlxPoint
-	{
-		final padding:Int = Constants.TILE_SIZE * 2;
-		var x:Float = (FlxG.random.int(Std.int(padding / Constants.TILE_SIZE),
-			Std.int((FlxG.width - padding) / Constants.TILE_SIZE) - 1)) * Constants.TILE_SIZE;
-		var y:Float = (FlxG.random.int(Std.int(padding / Constants.TILE_SIZE),
-			Std.int((FlxG.height - padding) / Constants.TILE_SIZE) - 1)) * Constants.TILE_SIZE;
-		return FlxPoint.get(x, y);
-	}
-}
-
-class CollisionHandling
-{
-	var snake:Snake;
-	var apple:Apple;
-
-	public function new(apple:Apple, snake:Snake)
-	{
-		this.snake = snake;
-		this.apple = apple;
-	}
-
-	public function appleIsTouchingHead():Bool
-	{
-		// Check against body
-
-		if (FlxCollision.pixelPerfectCheck(snake.snakeHead, apple))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	public function appleIsTouchingBody():Bool
-	{
-		for (snakePart in snake.snakeBody.members)
-		{
-			if (snakePart != null && FlxCollision.pixelPerfectCheck(apple, snakePart))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-}
-
-class InputHandling
-{
-	var snake:Snake;
-	var dPad:FlxVirtualDPadButtons;
-
-	public function new(snake:Snake, dPad:FlxVirtualDPadButtons)
-	{
-		this.snake = snake;
-		this.dPad = dPad;
-	}
-
-	public function input():Void
-	{
-		#if js
-		if (snake != null)
-		{
-			if (FlxG.keys.anyJustPressed([A, LEFT]) && snake.direction != RIGHT)
-				snake.direction = LEFT;
-			else if (FlxG.keys.anyJustPressed([D, RIGHT]) && snake.direction != LEFT)
-				snake.direction = RIGHT;
-			else if (FlxG.keys.anyJustPressed([W, UP]) && snake.direction != DOWN)
-				snake.direction = UP;
-			else if (FlxG.keys.anyJustPressed([S, DOWN]) && snake.direction != UP)
-				snake.direction = DOWN;
-		}
-		#end
-
-		#if desktop
-		if (snake != null)
-		{
-			if (FlxG.keys.anyJustPressed([A, LEFT]) && snake.direction != RIGHT)
-				snake.direction = LEFT;
-			else if (FlxG.keys.anyJustPressed([D, RIGHT]) && snake.direction != LEFT)
-				snake.direction = RIGHT;
-			else if (FlxG.keys.anyJustPressed([W, UP]) && snake.direction != DOWN)
-				snake.direction = UP;
-			else if (FlxG.keys.anyJustPressed([S, DOWN]) && snake.direction != UP)
-				snake.direction = DOWN;
-		}
-		#end
-
-
-		#if android
-		// Handle Android Movement...
-		if (snake != null)
-		{
-			if (dPad.getButton(LEFT).justPressed && snake.direction != RIGHT)
-				snake.direction = LEFT;
-			else if (dPad.getButton(RIGHT).justPressed && snake.direction != LEFT)
-				snake.direction = RIGHT;
-			else if (dPad.getButton(UP).justPressed && snake.direction != DOWN)
-				snake.direction = UP;
-			else if (dPad.getButton(DOWN).justPressed && snake.direction != UP)
-				snake.direction = DOWN;
-		}
-		#end
-
-	}
-}
 
 class GameOver extends FlxSubState
 {

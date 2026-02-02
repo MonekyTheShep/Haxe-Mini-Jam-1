@@ -118,7 +118,9 @@ class PlayState extends FlxState
 	@:dox(hide) override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
+		// make sure you cant do double input
 		accumulateDebounceTime += elapsed;
+
 		if (!snake.gameOver)
 		{
 
@@ -130,8 +132,7 @@ class PlayState extends FlxState
 				score += 1;
 			}
 
-			// make sure you cant do double input
-			if ((Constants.movementInterval / FlxG.updateFramerate) > accumulateDebounceTime)
+			if ((Constants.movementInterval / 60) > accumulateDebounceTime)
 			{
 				accumulateDebounceTime = 0;
 				inputHandling.input();

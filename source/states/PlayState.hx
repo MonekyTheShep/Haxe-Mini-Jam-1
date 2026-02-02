@@ -111,21 +111,31 @@ class PlayState extends FlxState
 
 	@:noCompletion var _prevElapsed:Float = 0;
 
+	var accumulateDebounceTime:Float = 0;
+
 	@:dox(hide) override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
+		accumulateDebounceTime += elapsed;
 		if (!snake.gameOver)
 		{
 
 			if (collisionHandling.appleIsTouchingHead())
 			{
 				collectApple.play();
-				appleHandling.moveApple();
 				snake.grow();
+				appleHandling.moveApple();
 				score += 1;
 			}
 
-			inputHandling.input();
+			// make sure you cant do double input
+			if ((Constants.movementInterval / FlxG.updateFramerate) > accumulateDebounceTime)
+			{
+				accumulateDebounceTime = 0;
+				inputHandling.input();
+			}
+			
+
 		}
 		else
 		{
@@ -162,7 +172,7 @@ class AppleHandling
 		while (!validPosition)
 		{
 			validPosition = true; // assume okay until proven otherwise
-			if (collisionHandling.appleIsTouchingBody())
+			if (collisionHandling.appleIsTouchingHead())
 			{
 				validPosition = false;
 			}

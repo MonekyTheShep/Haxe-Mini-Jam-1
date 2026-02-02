@@ -58,14 +58,13 @@ class Snake extends FlxGroup
 		snakeHead.color = snakeColor;
 
 
-		timer = new FlxTimer().start(movementInterval / FlxG.updateFramerate, doTimer);
+		timer = new FlxTimer().start(Constants.movementInterval / FlxG.updateFramerate, doTimer);
 
 		doTimer();
 
 	}
 
-	// your movement timer
-	public var movementInterval:Float = 8;
+
 
 	private function doTimer(?tmr:FlxTimer):Void
 	{
@@ -77,7 +76,7 @@ class Snake extends FlxGroup
 
 		lastPosition();
 		move();
-		timer.start(movementInterval / FlxG.updateFramerate, doTimer);
+		timer.start(Constants.movementInterval / FlxG.updateFramerate, doTimer);
 
 	}
 

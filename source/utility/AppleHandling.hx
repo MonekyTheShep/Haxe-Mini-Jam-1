@@ -4,21 +4,23 @@ import flixel.group.FlxGroup;
 import flixel.math.FlxPoint;
 import objects.Apple;
 import objects.Snake;
+import utility.CollisionHandling;
 
 class AppleHandling
 {
 	var apple:Apple;
 	var snake:Snake;
+	var collisionHandling:CollisionHandling;
 
-	public function new(apple:Apple, snake:Snake)
+	public function new(apple:Apple, snake:Snake, collisionHandling:CollisionHandling)
 	{
 		this.apple = apple;
 		this.snake = snake;
+		this.collisionHandling = collisionHandling;
 	}
 
 	public function moveApple()
 	{
-		var collisionHandling:CollisionHandling = new CollisionHandling(apple, snake);
 		var validPosition = false;
 		// makes sure the apple never spawns in the snake
 		while (!validPosition)

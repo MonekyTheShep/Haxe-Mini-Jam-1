@@ -18,7 +18,10 @@ class CollisionHandling
 	{
 		// Check against body
 
-		if (FlxCollision.pixelPerfectCheck(snake.snakeHead, apple))
+		var appleOverSnakeHeadX:Bool = snake.snakeHead.x == apple.x;
+		var appleOverSnakeHeadY:Bool = snake.snakeHead.y == apple.y;
+
+		if (appleOverSnakeHeadX && appleOverSnakeHeadY)
 		{
 			return true;
 		}
@@ -32,7 +35,9 @@ class CollisionHandling
 	{
 		for (snakePart in snake.snakeBody.members)
 		{
-			if (snakePart != null && FlxCollision.pixelPerfectCheck(apple, snakePart))
+			var appleOverSnakeBodyX:Bool = snakePart.x == apple.x;
+			var appleOverSnakeBodyY:Bool = snakePart.y == apple.y;
+			if (appleOverSnakeBodyX && appleOverSnakeBodyY)
 			{
 				return true;
 			}

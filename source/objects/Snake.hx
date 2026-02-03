@@ -95,7 +95,10 @@ class Snake extends FlxGroup
 					tails.x = prevPositions[i][0];
 					tails.y = prevPositions[i][1];
 					// check the tail collision to the head
-					if (FlxCollision.pixelPerfectCheck(snakeHead, tails))
+					var snakeHeadOverlapTailX:Bool = snakeHead.x == tails.x;
+					var snakeHeadOverlapTailY:Bool = snakeHead.y == tails.y;
+
+					if (snakeHeadOverlapTailX && snakeHeadOverlapTailY)
 					{
 						gameOver = true;
 					}
@@ -103,7 +106,6 @@ class Snake extends FlxGroup
 			}
 
 		}
-
 	}
 
 	// snake grow function to add to the snakebody

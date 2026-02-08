@@ -16,21 +16,8 @@ class InputHandling
 
 	public function input():Void
 	{
-		#if js
-		if (snake != null)
-		{
-			if (FlxG.keys.anyJustPressed([A, LEFT]) && snake.direction != RIGHT)
-				snake.direction = LEFT;
-			else if (FlxG.keys.anyJustPressed([D, RIGHT]) && snake.direction != LEFT)
-				snake.direction = RIGHT;
-			else if (FlxG.keys.anyJustPressed([W, UP]) && snake.direction != DOWN)
-				snake.direction = UP;
-			else if (FlxG.keys.anyJustPressed([S, DOWN]) && snake.direction != UP)
-				snake.direction = DOWN;
-		}
-		#end
 
-		#if desktop
+		#if (desktop || js)
 		if (snake != null)
 		{
 			if (FlxG.keys.anyJustPressed([A, LEFT]) && snake.direction != RIGHT)

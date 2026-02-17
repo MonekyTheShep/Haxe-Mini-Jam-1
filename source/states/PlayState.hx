@@ -57,24 +57,16 @@ class PlayState extends FlxState
 	{
 		super.create();
 
+		initialiseUI();
+		initialiseGame();
+	}
 
+	public function initialiseUI():Void
+	{
 		uiCamera = new FlxCamera();
 		uiCamera.bgColor = FlxColor.TRANSPARENT;
 		FlxG.cameras.add(uiCamera, false);
 		FlxG.camera.pixelPerfectRender = FlxG.camera.pixelPerfectShake = true;
-
-		scoreText = new FlxText(10, 10, 0, "Score: [0]", 30);
-		scoreText.cameras = [uiCamera];
-
-		#if mobile
-		dPad.cameras = [uiCamera];
-		dPad.y = FlxG.height - dPad.height;
-		add(dPad);
-		#end
-
-		add(new GridSprite(FlxColor.WHITE));
-		add(snake = new Snake(FlxG.width / 2, FlxG.height / 2));
-		add(scoreText);
 
 		#if SHADERS_ALLOWED
 		if (Menu.shadersEnabled)
@@ -84,17 +76,42 @@ class PlayState extends FlxState
 		}
 		#end
 
+		scoreText = new FlxText(10, 10, 0, "Score: [0]", 30);
+		scoreText.cameras = [uiCamera];
+		add(scoreText);
+
+		#if mobile
+		dPad.cameras = [uiCamera];
+		dPad.y = FlxG.height - dPad.height;
+		add(dPad);
+		#end
+	}
+
+	public function initialiseGame():Void
+	{
+		add(new GridSprite(FlxColor.WHITE));
+
+		add(snake = new Snake(FlxG.width / 2, FlxG.height / 2));
+		collisionHandling = new CollisionHandling(apple, snake);
+
+		apple = new Apple();
+		appleHandling = new AppleHandling(apple, snake, collisionHandling);
+
+		var randomPos = appleHandling.randomPosition();
+		apple.x = randomPos.x;
+		apple.y = randomPos.y;
+		add(apple);
+
+		initialiseInputHandling();
+
 		// sounds
 		collectApple = FlxG.sound.load(AssetPaths.collectsound__ogg);
 		FlxG.sound.playMusic(AssetPaths.retro_arcade_game_music_297305__ogg, 1, true);
+	}
 
-
-		// add the first apple
-		apple = new Apple();
-		collisionHandling = new CollisionHandling(apple, snake);
-		appleHandling = new AppleHandling(apple, snake, collisionHandling);
-		var randomPos = appleHandling.randomPosition();
-
+	public function initialiseInputHandling():Void
+	{
+		// Input handling
 		#if android
 		inputHandling = new InputHandling(snake, dPad);
 		#elseif desktop
@@ -105,10 +122,6 @@ class PlayState extends FlxState
 		#if js
 		inputHandling = new InputHandling(snake, null);
 		#end
-		apple.x = randomPos.x;
-		apple.y = randomPos.y;
-		add(apple);
-
 	}
 
 	@:noCompletion var _prevElapsed:Float = 0;

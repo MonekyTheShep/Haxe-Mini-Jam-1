@@ -18,6 +18,7 @@ class InputHandling
 	{
 
 		#if (desktop || js)
+		// Handle desktop and web movement
 		if (snake != null)
 		{
 			if (FlxG.keys.anyJustPressed([A, LEFT]) && snake.direction != RIGHT)
@@ -34,7 +35,7 @@ class InputHandling
 
 		#if android
 		// Handle Android Movement...
-		if (snake != null)
+		if (snake != null && dPad != null)
 		{
 			if (dPad.getButton(LEFT).justPressed && snake.direction != RIGHT)
 				snake.direction = LEFT;

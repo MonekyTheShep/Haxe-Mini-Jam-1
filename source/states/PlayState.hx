@@ -91,15 +91,17 @@ class PlayState extends FlxState
 	{
 		add(new GridSprite(FlxColor.WHITE));
 
-		add(snake = new Snake(FlxG.width / 2, FlxG.height / 2));
+		apple = new Apple();
+		snake = new Snake(FlxG.width / 2, FlxG.height / 2);
+
 		collisionHandling = new CollisionHandling(apple, snake);
 
-		apple = new Apple();
 		appleHandling = new AppleHandling(apple, snake, collisionHandling);
 
 		var randomPos = appleHandling.randomPosition();
 		apple.x = randomPos.x;
 		apple.y = randomPos.y;
+		add(snake);
 		add(apple);
 
 		initialiseInputHandling();

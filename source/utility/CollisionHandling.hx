@@ -1,5 +1,5 @@
 package utility;
-import flixel.util.FlxCollision;
+
 import objects.Apple;
 import objects.Snake;
 

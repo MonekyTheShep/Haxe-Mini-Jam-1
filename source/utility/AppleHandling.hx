@@ -1,4 +1,5 @@
 package utility;
+
 import flixel.FlxG;
 import flixel.group.FlxGroup;
 import flixel.math.FlxPoint;
@@ -23,6 +24,7 @@ class AppleHandling
 	{
 		var validPosition = false;
 		// makes sure the apple never spawns in the snake
+		
 		while (!validPosition)
 		{
 			validPosition = true; // assume okay until proven otherwise

@@ -51,9 +51,9 @@ class AppleHandling
 	public function randomPosition():FlxPoint
 	{
 		var x:Float =  (FlxG.random.int(0,
-			Std.int(FlxG.width / Constants.TILE_SIZE)));
+		Std.int(FlxG.width / Constants.TILE_SIZE) - 1));
 		var y:Float = (FlxG.random.int(0,
-			Std.int(FlxG.height / Constants.TILE_SIZE)));
+		Std.int(FlxG.height / Constants.TILE_SIZE) - 1));
 
 		return FlxPoint.weak(x * Constants.TILE_SIZE, y * Constants.TILE_SIZE);
 	}

@@ -41,15 +41,17 @@ class Snake extends FlxGroup
 		super();
 
 		this.direction = direction;
-		prevPositions = new Array<FlxPoint>();
+		this.prevPositions = new Array<FlxPoint>();
+		this.snakeHead = new FlxSprite();
+		this.snakeBody = new FlxTypedSpriteGroup<FlxSprite>();
 	
 		snakeHead.makeGraphic(Constants.TILE_SIZE, Constants.TILE_SIZE);
 		snakeHead.setPosition(x, y);
 		snakeHead.color = snakeColor;
-		
-		add(snakeHead = new FlxSprite());
-		add(snakeBody = new FlxTypedSpriteGroup<FlxSprite>());
 
+		add(snakeHead);
+		add(snakeBody);
+		
 		timer = new FlxTimer().start(Constants.movementInterval / FlxG.updateFramerate, doTimer);
 		doTimer();
 	}

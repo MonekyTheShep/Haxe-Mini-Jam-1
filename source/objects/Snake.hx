@@ -80,7 +80,6 @@ class Snake extends FlxGroup
 		}
 	}
 
-	// snake grow function to add to the snakebody
 	public function grow():Void
 	{
 		var tailSquare:FlxSprite = new FlxSprite();
@@ -101,18 +100,8 @@ class Snake extends FlxGroup
 		{
 			for (i => tails in snakeBody.members)
 			{
-				// move it to the previous position
 				tails.x = prevPositions[i].x;
 				tails.y = prevPositions[i].y;
-				// check the tail collision to the head
-				var snakeHeadOverlapTailX:Bool = snakeHead.x == tails.x;
-				var snakeHeadOverlapTailY:Bool = snakeHead.y == tails.y;
-
-				if (snakeHeadOverlapTailX && snakeHeadOverlapTailY)
-				{
-					gameOver = true;
-				}
-				
 			}
 		}
 	}

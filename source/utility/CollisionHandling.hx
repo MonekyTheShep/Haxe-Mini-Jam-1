@@ -1,5 +1,6 @@
 package utility;
 
+import flixel.math.FlxPoint;
 import objects.Apple;
 import objects.Snake;
 
@@ -14,29 +15,28 @@ class CollisionHandling
 		this.apple = apple;
 	}
 
-	public function appleIsTouchingHead():Bool
+	public function appleIsTouchingHead(?newPos:FlxPoint):Bool
 	{
 		// Check against body
-
-		var appleOverSnakeHeadX:Bool = snake.snakeHead.x == apple.x;
-		var appleOverSnakeHeadY:Bool = snake.snakeHead.y == apple.y;
+		var appleOverSnakeHeadX:Bool = (newPos == null) ? (snake.snakeHead.x == apple.x) : (snake.snakeHead.x == newPos.x);
+		var appleOverSnakeHeadY:Bool = (newPos == null) ? (snake.snakeHead.y == apple.y) : (snake.snakeHead.y == newPos.y);
 
 		if (appleOverSnakeHeadX && appleOverSnakeHeadY)
 		{
 			return true;
 		}
-		else
+		else  
 		{
 			return false;
 		}
 	}
 
-	public function appleIsTouchingBody():Bool
+	public function appleIsTouchingBody(?newPos:FlxPoint):Bool
 	{
 		for (snakePart in snake.snakeBody.members)
 		{
-			var appleOverSnakeBodyX:Bool = snakePart.x == apple.x;
-			var appleOverSnakeBodyY:Bool = snakePart.y == apple.y;
+			var appleOverSnakeBodyX:Bool = (newPos == null) ? (snakePart.x == apple.x) : (snakePart.x == newPos.x);
+			var appleOverSnakeBodyY:Bool = (newPos == null) ? (snakePart.y == apple.y) : (snakePart.y == newPos.y);
 			if (appleOverSnakeBodyX && appleOverSnakeBodyY)
 			{
 				return true;

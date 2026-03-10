@@ -22,19 +22,19 @@ class AppleHandling
 
 	public function moveApple()
 	{
-		var validPosition = false;
-		// makes sure the apple never spawns in the snake
+		var validPosition:Bool = false;
+		var newApplePos:FlxPoint = randomPosition();
 		
-		var randomPos = randomPosition();
+		// makes sure the apple never spawns in the snake
 		while (!validPosition)
 		{
 			validPosition = true; // assume okay until proven otherwise
-			if (collisionHandling.appleIsTouchingHead())
+			if (collisionHandling.appleIsTouchingHead(newApplePos))
 			{
 				validPosition = false;
 			}
 
-			if (collisionHandling.appleIsTouchingBody())
+			if (collisionHandling.appleIsTouchingBody(newApplePos))
 			{
 				validPosition = false;
 			}
@@ -42,12 +42,12 @@ class AppleHandling
 			if (!validPosition)
 			{
 				
-				randomPos = randomPosition();
+				newApplePos = randomPosition();
 			}
 		}
-		
-		apple.x = randomPos.x;
-		apple.y = randomPos.y;
+
+		apple.x = newApplePos.x;
+		apple.y = newApplePos.y;
 	}
 
 	// spawn apple at random location

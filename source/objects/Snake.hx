@@ -11,7 +11,6 @@ import flixel.util.FlxDestroyUtil;
 import flixel.util.FlxSpriteUtil;
 import flixel.util.FlxTimer;
 
-// your enum snake direction
 enum SnakeDirection
 {
 	LEFT;
@@ -106,7 +105,7 @@ class Snake extends FlxGroup
 		}
 	}
 
-	function handleTailCollision() 
+	function handleTailCollision():Void
 	{
 		for (i => tails in snakeBody.members)
 		{

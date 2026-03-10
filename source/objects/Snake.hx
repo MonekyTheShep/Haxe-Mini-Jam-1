@@ -4,6 +4,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
+import flixel.math.FlxPoint;
 import flixel.util.FlxCollision;
 import flixel.util.FlxColor;
 import flixel.util.FlxDestroyUtil;
@@ -21,25 +22,18 @@ enum SnakeDirection
 
 class Snake extends FlxGroup
 {
-	// snake color wowwww
 	var snakeColor = FlxColor.GREEN;
 	var tailColor = FlxColor.RED;
-
-	var rainbowColors:Array<FlxColor> = [FlxColor.RED, FlxColor.BLUE, FlxColor.GREEN, FlxColor.ORANGE, FlxColor.YELLOW];
 	
-	// snake parts
 	public var snakeHead:FlxSprite;
 	public var snakeBody:FlxTypedSpriteGroup<FlxSprite>;
-
-	// prev positions storey variable
-	var prevPositions:Array<Array<Float>>;
+	
+	var prevPositions:Array<FlxPoint>;
 
 	var timer:FlxTimer;
 
-	// game over boolean
 	public var gameOver:Bool = false;
 
-	// direction
 	public var direction:Null<SnakeDirection> = null;
 
 	public function new(x:Float = 0, y:Float = 0, ?direction:SnakeDirection = RIGHT)
@@ -47,24 +41,18 @@ class Snake extends FlxGroup
 		super();
 
 		this.direction = direction;
-
-		// set snakehead shit
+		prevPositions = new Array<FlxPoint>();
+	
+		snakeHead.makeGraphic(Constants.TILE_SIZE, Constants.TILE_SIZE);
+		snakeHead.setPosition(x, y);
+		snakeHead.color = snakeColor;
+		
 		add(snakeHead = new FlxSprite());
 		add(snakeBody = new FlxTypedSpriteGroup<FlxSprite>());
 
-		snakeHead.makeGraphic(Constants.TILE_SIZE, Constants.TILE_SIZE);
-		snakeHead.setPosition(x, y);
-		prevPositions = new Array<Array<Float>>();
-		snakeHead.color = snakeColor;
-
-
 		timer = new FlxTimer().start(Constants.movementInterval / FlxG.updateFramerate, doTimer);
-
 		doTimer();
-
 	}
-
-
 
 	private function doTimer(?tmr:FlxTimer):Void
 	{
@@ -76,50 +64,70 @@ class Snake extends FlxGroup
 
 		lastPosition();
 		move();
+		
 		timer.start(Constants.movementInterval / FlxG.updateFramerate, doTimer);
-
 	}
 
 	@:noCompletion override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
-		// loop through snakebody members until gameover is not true
 		if (!gameOver)
 		{
-			// wait until previous position = the snakebody.length. It has -1 because prevPosition it includes the head.
-			if (prevPositions.length - 1 == snakeBody.length)
-			{
-				for (i => tails in snakeBody.members)
-				{
-					// move it to the previous position
-					tails.x = prevPositions[i][0];
-					tails.y = prevPositions[i][1];
-					// check the tail collision to the head
-					var snakeHeadOverlapTailX:Bool = snakeHead.x == tails.x;
-					var snakeHeadOverlapTailY:Bool = snakeHead.y == tails.y;
-
-					if (snakeHeadOverlapTailX && snakeHeadOverlapTailY)
-					{
-						gameOver = true;
-					}
-				}
-			}
-
+			moveTailPrevPositions();
+			handleTailCollision();
 		}
 	}
 
 	// snake grow function to add to the snakebody
-	public function grow()
+	public function grow():Void
 	{
 		var tailSquare:FlxSprite = new FlxSprite();
 		tailSquare.makeGraphic(Constants.TILE_SIZE, Constants.TILE_SIZE);
 		// move tail square to end of snake
-		tailSquare.x = prevPositions[prevPositions.length - 1][0];
-		tailSquare.y = prevPositions[prevPositions.length - 1][1];
+		tailSquare.x = prevPositions[prevPositions.length - 1].x;
+		tailSquare.y = prevPositions[prevPositions.length - 1].y;
 
 		tailSquare.color = tailColor;
 
 		snakeBody.add(tailSquare);
+	}
+
+	function moveTailPrevPositions():Void
+	{
+		// wait until previous position = the snakebody.length. It has -1 because prevPosition it includes the head.
+		if (prevPositions.length - 1 == snakeBody.length)
+		{
+			for (i => tails in snakeBody.members)
+			{
+				// move it to the previous position
+				tails.x = prevPositions[i].x;
+				tails.y = prevPositions[i].y;
+				// check the tail collision to the head
+				var snakeHeadOverlapTailX:Bool = snakeHead.x == tails.x;
+				var snakeHeadOverlapTailY:Bool = snakeHead.y == tails.y;
+
+				if (snakeHeadOverlapTailX && snakeHeadOverlapTailY)
+				{
+					gameOver = true;
+				}
+				
+			}
+		}
+	}
+
+	function handleTailCollision() 
+	{
+		for (i => tails in snakeBody.members)
+		{
+			var snakeHeadOverlapTailX:Bool = snakeHead.x == tails.x;
+			var snakeHeadOverlapTailY:Bool = snakeHead.y == tails.y;
+
+			if (snakeHeadOverlapTailX && snakeHeadOverlapTailY)
+			{
+				gameOver = true;
+			}
+				
+		}
 	}
 
 	// move the snake and do screen wrapping
@@ -142,19 +150,25 @@ class Snake extends FlxGroup
 			FlxSpriteUtil.screenWrap(snakeHead);
 		}
 	}
+
 	// store last moved position
 	function lastPosition():Void
 	{
-		prevPositions = [];
+		for (prevPos in prevPositions)
+		{
+			prevPos.put();
+		}
+
+		prevPositions.resize(0);
 
 		// add the head position
-		prevPositions.push([snakeHead.x, snakeHead.y]);
+		prevPositions.push(FlxPoint.get(snakeHead.x, snakeHead.y));
 
 		// store the tail body positions.
 		for (member in snakeBody.members)
 		{
 			var tails:FlxSprite = cast(member, FlxSprite);
-			prevPositions.push([tails.x, tails.y]);
+			prevPositions.push(FlxPoint.get(tails.x, tails.y));
 		}
 	}
 }

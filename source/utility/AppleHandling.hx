@@ -25,6 +25,7 @@ class AppleHandling
 		var validPosition = false;
 		// makes sure the apple never spawns in the snake
 		
+		var randomPos = randomPosition();
 		while (!validPosition)
 		{
 			validPosition = true; // assume okay until proven otherwise
@@ -40,11 +41,13 @@ class AppleHandling
 
 			if (!validPosition)
 			{
-				var randomPos = randomPosition();
-				apple.x = randomPos.x;
-				apple.y = randomPos.y;
+				
+				randomPos = randomPosition();
 			}
 		}
+		
+		apple.x = randomPos.x;
+		apple.y = randomPos.y;
 	}
 
 	// spawn apple at random location

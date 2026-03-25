@@ -50,30 +50,24 @@ class Snake extends FlxGroup
 
 		add(snakeHead);
 		add(snakeBody);
-		
-		timer = new FlxTimer().start(Constants.movementInterval / FlxG.updateFramerate, doTimer);
-		doTimer();
 	}
 
-	private function doTimer(?tmr:FlxTimer):Void
-	{
-		if (!this.alive && tmr != null)
-		{
-			tmr = FlxDestroyUtil.destroy(tmr);
-			return;
-		}
 
-		lastPosition();
-		move();
-		
-		timer.start(Constants.movementInterval / FlxG.updateFramerate, doTimer);
-	}
+	var accumulatedSnakeTime:Float = 0.0;
 
 	@:noCompletion override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
+		accumulatedSnakeTime += elapsed;
+		trace(accumulatedSnakeTime);
 		if (!gameOver)
 		{
+			if (accumulatedSnakeTime > Constants.SNAKE_MOVE_INTERVAL)
+			{
+				storeLastPosition();
+				move();
+				accumulatedSnakeTime = 0.0;
+			}
 			moveTailPrevPositions();
 			handleTailCollision();
 		}
@@ -142,7 +136,7 @@ class Snake extends FlxGroup
 	}
 
 	// store last moved position
-	function lastPosition():Void
+	function storeLastPosition():Void
 	{
 		for (prevPos in prevPositions)
 		{

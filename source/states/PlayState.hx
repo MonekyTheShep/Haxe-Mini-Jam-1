@@ -147,11 +147,11 @@ class PlayState extends FlxState
 				score += 1;
 			}
 
-			if ((Constants.movementInterval / 60) > accumulateDebounceTime)
-			{
-				accumulateDebounceTime = 0;
-				inputHandling.input();
-			}
+			inputHandling.input();
+			// if (accumulateDebounceTime > Constants.SNAKE_MOVE_INTERVAL) Fix this later
+			// {
+			// 	accumulateDebounceTime = 0.0;
+			// }
 		}
 		else
 		{

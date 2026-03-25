@@ -59,7 +59,6 @@ class Snake extends FlxGroup
 	{
 		super.update(elapsed);
 		accumulatedSnakeTime += elapsed;
-		trace(accumulatedSnakeTime);
 		if (!gameOver)
 		{
 			if (accumulatedSnakeTime > Constants.SNAKE_MOVE_INTERVAL)

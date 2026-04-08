@@ -1,15 +1,11 @@
 package objects;
 
-import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 import flixel.math.FlxPoint;
-import flixel.util.FlxCollision;
 import flixel.util.FlxColor;
-import flixel.util.FlxDestroyUtil;
 import flixel.util.FlxSpriteUtil;
-import flixel.util.FlxTimer;
 
 enum SnakeDirection
 {
@@ -21,25 +17,24 @@ enum SnakeDirection
 
 class Snake extends FlxGroup
 {
-	var snakeColor = FlxColor.GREEN;
-	var tailColor = FlxColor.RED;
+	final snakeColor = FlxColor.GREEN;
+	final tailColor = FlxColor.RED;
 	
 	public var snakeHead:FlxSprite;
 	public var snakeBody:FlxTypedSpriteGroup<FlxSprite>;
 	
 	var prevPositions:Array<FlxPoint>;
 
-	var timer:FlxTimer;
+	public var gameOver:Bool;
 
-	public var gameOver:Bool = false;
-
-	public var direction:Null<SnakeDirection> = null;
+	public var direction:Null<SnakeDirection>;
 
 	public function new(x:Float = 0, y:Float = 0, ?direction:SnakeDirection = RIGHT)
 	{
 		super();
 
 		this.direction = direction;
+		this.gameOver = false;
 		this.prevPositions = new Array<FlxPoint>();
 		this.snakeHead = new FlxSprite();
 		this.snakeBody = new FlxTypedSpriteGroup<FlxSprite>();
@@ -150,7 +145,7 @@ class Snake extends FlxGroup
 		// store the tail body positions.
 		for (member in snakeBody.members)
 		{
-			var tails:FlxSprite = cast(member, FlxSprite);
+			var tails:FlxSprite = member;
 			prevPositions.push(FlxPoint.get(tails.x, tails.y));
 		}
 	}

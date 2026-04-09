@@ -21,14 +21,7 @@ class CollisionHandling
 		var appleOverSnakeHeadX:Bool = (newPos == null) ? (snake.snakeHead.x == apple.x) : (snake.snakeHead.x == newPos.x);
 		var appleOverSnakeHeadY:Bool = (newPos == null) ? (snake.snakeHead.y == apple.y) : (snake.snakeHead.y == newPos.y);
 
-		if (appleOverSnakeHeadX && appleOverSnakeHeadY)
-		{
-			return true;
-		}
-		else  
-		{
-			return false;
-		}
+		return appleOverSnakeHeadX && appleOverSnakeHeadY;
 	}
 
 	public function appleIsTouchingBody(?newPos:FlxPoint):Bool

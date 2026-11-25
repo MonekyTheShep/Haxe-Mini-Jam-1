@@ -16,9 +16,9 @@ import objects.shaders.CrtShader;
 import openfl.filters.ShaderFilter;
 import states.GameOver;
 import states.Menu;
-import utility.AppleHandling;
-import utility.CollisionHandling;
-import utility.InputHandling;
+import system.AppleHandling;
+import system.CollisionHandling;
+import system.InputHandling;
 #if js
 import js.Browser;
 #end
